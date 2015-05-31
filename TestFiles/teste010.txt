@@ -1,0 +1,8 @@
+'aa\aaaaa'
+'asasas\\aasasas'
+'asasas\'aasasas'
+'
+''
+'aa"aa'
+'aaa\'
+'aaaa\'aaaa'

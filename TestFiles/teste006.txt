@@ -1,0 +1,6 @@
+-- teste o comentário
+
+--[ comentário logo
+muti]
+linha]
+---Teste outra linha
