@@ -1,5 +1,6 @@
+#line 2 "parser.lex.c"
 
-#line 3 "lex.yy.c"
+#line 4 "parser.lex.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -548,12 +549,13 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "luaScanner.l"
 #line 2 "luaScanner.l"
-    /* need this for the call to atof() below */
+   #define YYSTYPE double
    #include <stdlib.h>
+   #include "luaParser.tab.h"
 /* -- qualquer coisa exceção o ] e então o ]*/
 /*  Aspas seguidas de zero ou mais (qualquer caracter que não é uma aspas ou backslash) ou (uma backslash seguida de qualquer coisa)*/
 /* falta string com ==[]=== */
-#line 557 "lex.yy.c"
+#line 559 "parser.lex.c"
 
 #define INITIAL 0
 
@@ -735,10 +737,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 23 "luaScanner.l"
+#line 24 "luaScanner.l"
 
 
-#line 742 "lex.yy.c"
+#line 744 "parser.lex.c"
 
 	if ( !(yy_init) )
 		{
@@ -824,289 +826,289 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 25 "luaScanner.l"
+#line 26 "luaScanner.l"
 printf("comment: %s\n", yytext);
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 26 "luaScanner.l"
+#line 27 "luaScanner.l"
 {/* Do Nothing */}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 27 "luaScanner.l"
+#line 28 "luaScanner.l"
 { yylval = atof(yytext);  return NUMBER; }
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 28 "luaScanner.l"
+#line 29 "luaScanner.l"
 printf("comment multiline: %s\n", yytext);
 	YY_BREAK
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 29 "luaScanner.l"
+#line 30 "luaScanner.l"
 printf("stringAspasSimples: %s\n", yytext);
 	YY_BREAK
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 30 "luaScanner.l"
+#line 31 "luaScanner.l"
 printf("stringAspasDuplas: %s\n", yytext);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 33 "luaScanner.l"
+#line 34 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 34 "luaScanner.l"
+#line 35 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 35 "luaScanner.l"
+#line 36 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 36 "luaScanner.l"
+#line 37 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 37 "luaScanner.l"
+#line 38 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 38 "luaScanner.l"
+#line 39 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 39 "luaScanner.l"
+#line 40 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 40 "luaScanner.l"
+#line 41 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 41 "luaScanner.l"
+#line 42 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 42 "luaScanner.l"
+#line 43 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 43 "luaScanner.l"
+#line 44 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 44 "luaScanner.l"
+#line 45 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 45 "luaScanner.l"
+#line 46 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 46 "luaScanner.l"
+#line 47 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 47 "luaScanner.l"
+#line 48 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 48 "luaScanner.l"
+#line 49 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 49 "luaScanner.l"
+#line 50 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 50 "luaScanner.l"
+#line 51 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 51 "luaScanner.l"
+#line 52 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 52 "luaScanner.l"
+#line 53 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 53 "luaScanner.l"
+#line 54 "luaScanner.l"
 printf("keyword: %s\n", yytext);
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 55 "luaScanner.l"
+#line 56 "luaScanner.l"
 return PLUS;
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 56 "luaScanner.l"
+#line 57 "luaScanner.l"
 return MINUS;
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 57 "luaScanner.l"
+#line 58 "luaScanner.l"
 return TIMES;
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 58 "luaScanner.l"
+#line 59 "luaScanner.l"
 return DIVIDE;
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 59 "luaScanner.l"
+#line 60 "luaScanner.l"
 return MOD;
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 60 "luaScanner.l"
+#line 61 "luaScanner.l"
 return POWER;
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 62 "luaScanner.l"
+#line 63 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 63 "luaScanner.l"
+#line 64 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 64 "luaScanner.l"
+#line 65 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 65 "luaScanner.l"
+#line 66 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 66 "luaScanner.l"
+#line 67 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 67 "luaScanner.l"
+#line 68 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 68 "luaScanner.l"
+#line 69 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 69 "luaScanner.l"
+#line 70 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 70 "luaScanner.l"
+#line 71 "luaScanner.l"
 return OPEN_PARENTHESES;
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 71 "luaScanner.l"
+#line 72 "luaScanner.l"
 return CLOSE_PARENTHESES;
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 72 "luaScanner.l"
+#line 73 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 73 "luaScanner.l"
+#line 74 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 74 "luaScanner.l"
+#line 75 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 75 "luaScanner.l"
+#line 76 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 76 "luaScanner.l"
-printf("Item lexico: %s\n", yytext);
+#line 77 "luaScanner.l"
+return END;
 	YY_BREAK
 case 49:
-YY_RULE_SETUP
-#line 77 "luaScanner.l"
-printf("Item lexico: %s\n", yytext);
-	YY_BREAK
-case 50:
 YY_RULE_SETUP
 #line 78 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
-case 51:
+case 50:
 YY_RULE_SETUP
 #line 79 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
-case 52:
+case 51:
 YY_RULE_SETUP
 #line 80 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
-case 53:
+case 52:
 YY_RULE_SETUP
 #line 81 "luaScanner.l"
 printf("Item lexico: %s\n", yytext);
 	YY_BREAK
+case 53:
+YY_RULE_SETUP
+#line 82 "luaScanner.l"
+printf("Item lexico: %s\n", yytext);
+	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 84 "luaScanner.l"
+#line 85 "luaScanner.l"
 printf("id:  %s\n", yytext);
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 87 "luaScanner.l"
+#line 88 "luaScanner.l"
 printf( "Unrecognized character: %s\n", yytext );
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 90 "luaScanner.l"
+#line 91 "luaScanner.l"
 ECHO;
 	YY_BREAK
-#line 1110 "lex.yy.c"
+#line 1112 "parser.lex.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2103,15 +2105,15 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 90 "luaScanner.l"
+#line 91 "luaScanner.l"
 
 
-
+/*
 int main( argcounter, argv )
 int argcounter;
 char **argv;
 {
-    /* -- to skip over program name */
+    //to skip over program name
     ++argv, --argcounter;
     if ( argcounter > 0 )
     yyin = fopen( argv[0], "r" );
@@ -2120,5 +2122,6 @@ char **argv;
     
     yylex();
 }
+*/
 
 

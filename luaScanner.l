@@ -1,6 +1,7 @@
 %{
-    /* need this for the call to atof() below */
-    #include <math.h>
+   #define YYSTYPE double
+   #include <stdlib.h>
+   #include "luaParser.tab.h"
 %}
 
 whitespace      ([ \t\n\r\f])+
@@ -24,7 +25,7 @@ stringAspasDuplas   \"([^"\\]|\\.)*\"
 
 {commentLine}         printf("comment: %s\n", yytext);
 {whitespace}          {/* Do Nothing */}
-{number}              printf("Number: %s\n", yytext);
+{number}              { yylval = atof(yytext);  return NUMBER; }
 {commentMultiLine}    printf("comment multiline: %s\n", yytext);
 {stringAspasSimples}  printf("stringAspasSimples: %s\n", yytext);
 {stringAspasDuplas}   printf("stringAspasDuplas: %s\n", yytext);
@@ -52,47 +53,48 @@ true            printf("keyword: %s\n", yytext);
 until           printf("keyword: %s\n", yytext);
 while           printf("keyword: %s\n", yytext);
 
-"+"             printf("Item lexico: %s\n", yytext);
-"-"             printf("Item lexico: %s\n", yytext);
-"*"             printf("Item lexico: %s\n", yytext);
-"/"             printf("Item lexico: %s\n", yytext);
-"%"             printf("Item lexico: %s\n", yytext);
-"^"             printf("Item lexico: %s\n", yytext);
+"+"             return PLUS;
+"-"             return MINUS;
+"*"             return TIMES;
+"/"             return DIVIDE;
+"%"             return MOD;
+"^"             return POWER;
+
 "#"             printf("Item lexico: %s\n", yytext);
-"=="             printf("Item lexico: %s\n", yytext);
-"~="             printf("Item lexico: %s\n", yytext);
-"<="             printf("Item lexico: %s\n", yytext);
-">="             printf("Item lexico: %s\n", yytext);
+"=="            printf("Item lexico: %s\n", yytext);
+"~="            printf("Item lexico: %s\n", yytext);
+"<="            printf("Item lexico: %s\n", yytext);
+">="            printf("Item lexico: %s\n", yytext);
 "<"             printf("Item lexico: %s\n", yytext);
 ">"             printf("Item lexico: %s\n", yytext);
 "="             printf("Item lexico: %s\n", yytext);
-"("             printf("Item lexico: %s\n", yytext);
-")"             printf("Item lexico: %s\n", yytext);
+"("             return OPEN_PARENTHESES;
+")"             return CLOSE_PARENTHESES;
 "{"             printf("Item lexico: %s\n", yytext);
 "}"             printf("Item lexico: %s\n", yytext);
 "["             printf("Item lexico: %s\n", yytext);
 "]"             printf("Item lexico: %s\n", yytext);
-";"             printf("Item lexico: %s\n", yytext);
+";"             return END;
 ":"             printf("Item lexico: %s\n", yytext);
 ","             printf("Item lexico: %s\n", yytext);
 "."             printf("Item lexico: %s\n", yytext);
-".."             printf("Item lexico: %s\n", yytext);
-"..."             printf("Item lexico: %s\n", yytext);
+".."            printf("Item lexico: %s\n", yytext);
+"..."           printf("Item lexico: %s\n", yytext);
 
 
 {id}            printf("id:  %s\n", yytext);
 
 
-.           printf( "Unrecognized character: %s\n", yytext );
+.               printf( "Unrecognized character: %s\n", yytext );
 
 
 %%
-
+/*
 int main( argcounter, argv )
 int argcounter;
 char **argv;
 {
-    /* -- to skip over program name */
+    //to skip over program name
     ++argv, --argcounter;
     if ( argcounter > 0 )
     yyin = fopen( argv[0], "r" );
@@ -101,4 +103,5 @@ char **argv;
     
     yylex();
 }
+*/
 
