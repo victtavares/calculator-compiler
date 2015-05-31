@@ -1,8 +1,9 @@
 %{
-#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #define YYSTYPE double
+int yylex(void);
+int yyerror(char *s);
 %}
 
 %token NUMBER
@@ -42,9 +43,6 @@ int yyerror(char *s) {
 }
 
 int main() {
-  if (yyparse())
-     fprintf(stderr, "Successful parsing.\n");
-  else
-     fprintf(stderr, "error found.\n");
+  yyparse();
    return 0;
 }

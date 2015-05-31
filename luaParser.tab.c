@@ -102,6 +102,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define YYSTYPE double
+int yylex(void);
+int yyerror(char *s);
 
 
 /* Enabling traces.  */
@@ -135,7 +137,7 @@ typedef int YYSTYPE;
 
 
 /* Line 216 of yacc.c.  */
-#line 139 "luaParser.tab.c"
+#line 141 "luaParser.tab.c"
 
 #ifdef short
 # undef short
@@ -422,8 +424,8 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    22,    22,    22,    24,    24,    27,    28,    29,    30,
-      31,    32,    33,    34
+       0,    24,    24,    24,    26,    26,    29,    30,    31,    32,
+      33,    34,    35,    36
 };
 #endif
 
@@ -1336,53 +1338,53 @@ yyreduce:
   switch (yyn)
     {
         case 5:
-#line 24 "luaParser.y"
+#line 26 "luaParser.y"
     { printf("Result: %f\n", (yyvsp[(1) - (2)])); ;}
     break;
 
   case 6:
-#line 27 "luaParser.y"
+#line 29 "luaParser.y"
     { (yyval)=(yyvsp[(1) - (1)]); printf("Value on Number: %f\n", (yyvsp[(1) - (1)]));;}
     break;
 
   case 7:
-#line 28 "luaParser.y"
+#line 30 "luaParser.y"
     { (yyval)=(yyvsp[(1) - (3)])+(yyvsp[(3) - (3)]); printf("Value on Plus: %f + %f\n", (yyvsp[(1) - (3)]),(yyvsp[(3) - (3)])); ;}
     break;
 
   case 8:
-#line 29 "luaParser.y"
+#line 31 "luaParser.y"
     { (yyval)=(yyvsp[(1) - (3)])-(yyvsp[(3) - (3)]); ;}
     break;
 
   case 9:
-#line 30 "luaParser.y"
+#line 32 "luaParser.y"
     { (yyval)=(yyvsp[(1) - (3)])*(yyvsp[(3) - (3)]); ;}
     break;
 
   case 10:
-#line 31 "luaParser.y"
+#line 33 "luaParser.y"
     { (yyval)=(yyvsp[(1) - (3)])/(yyvsp[(3) - (3)]); ;}
     break;
 
   case 11:
-#line 32 "luaParser.y"
+#line 34 "luaParser.y"
     { (yyval)=-(yyvsp[(2) - (2)]); ;}
     break;
 
   case 12:
-#line 33 "luaParser.y"
+#line 35 "luaParser.y"
     { (yyval)=pow((yyvsp[(1) - (3)]),(yyvsp[(3) - (3)])); ;}
     break;
 
   case 13:
-#line 34 "luaParser.y"
+#line 36 "luaParser.y"
     { (yyval)=(yyvsp[(2) - (3)]); ;}
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1386 "luaParser.tab.c"
+#line 1388 "luaParser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1596,17 +1598,16 @@ yyreturn:
 }
 
 
-#line 37 "luaParser.y"
+#line 39 "luaParser.y"
 
 
 int yyerror(char *s) {
   printf("%s\n", s);
+  return 0;
 }
 
 int main() {
-  if (yyparse())
-     fprintf(stderr, "Successful parsing.\n");
-  else
-     fprintf(stderr, "error found.\n");
+  yyparse();
+   return 0;
 }
 
