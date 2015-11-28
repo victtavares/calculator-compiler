@@ -41,31 +41,35 @@
    enum yytokentype {
      INTEGER = 258,
      VARIABLE = 259,
-     WHILE = 260,
-     IF = 261,
-     PRINT = 262,
-     IFX = 263,
-     ELSE = 264,
-     NE = 265,
-     EQ = 266,
-     LE = 267,
-     GE = 268,
-     UMINUS = 269
+     PLUS = 260,
+     MINUS = 261,
+     WHILE = 262,
+     IF = 263,
+     PRINT = 264,
+     IFX = 265,
+     ELSE = 266,
+     NE = 267,
+     EQ = 268,
+     LE = 269,
+     GE = 270,
+     UMINUS = 271
    };
 #endif
 /* Tokens.  */
 #define INTEGER 258
 #define VARIABLE 259
-#define WHILE 260
-#define IF 261
-#define PRINT 262
-#define IFX 263
-#define ELSE 264
-#define NE 265
-#define EQ 266
-#define LE 267
-#define GE 268
-#define UMINUS 269
+#define PLUS 260
+#define MINUS 261
+#define WHILE 262
+#define IF 263
+#define PRINT 264
+#define IFX 265
+#define ELSE 266
+#define NE 267
+#define EQ 268
+#define LE 269
+#define GE 270
+#define UMINUS 271
 
 
 
@@ -79,7 +83,7 @@ typedef union YYSTYPE
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 1529 of yacc.c.  */
-#line 83 "y.tab.h"
+#line 87 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

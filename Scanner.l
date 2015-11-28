@@ -22,10 +22,12 @@ number          {numberNoZero}|{zero}
             }
 
 
-[-()<>=+*/;{}.] {
+[()<>=*/;{}.] {
                 return *yytext;
              }
 
+"+"             return PLUS;
+"-"             return MINUS;
 ">="            return GE;
 "<="            return LE;
 "=="            return EQ;

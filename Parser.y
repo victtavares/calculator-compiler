@@ -24,12 +24,12 @@ int sym[26];                    /* symbol table */
 
 %token <iValue> INTEGER
 %token <sIndex> VARIABLE
-%token WHILE IF PRINT
+%token PLUS MINUS WHILE IF PRINT 
 %nonassoc IFX
 %nonassoc ELSE
 
 %left GE LE EQ NE '>' '<'
-%left '+' '-'
+%left PLUS MINUS
 %left '*' '/'
 %nonassoc UMINUS
 
@@ -63,20 +63,20 @@ stmt_list:
         ;
 
 expr:
-          INTEGER               { $$ = con($1); }
-        | VARIABLE              { $$ = id($1); }
-        | '-' expr %prec UMINUS { $$ = opr(UMINUS, 1, $2); }
-        | expr '+' expr         { $$ = opr('+', 2, $1, $3); }
-        | expr '-' expr         { $$ = opr('-', 2, $1, $3); }
-        | expr '*' expr         { $$ = opr('*', 2, $1, $3); }
-        | expr '/' expr         { $$ = opr('/', 2, $1, $3); }
-        | expr '<' expr         { $$ = opr('<', 2, $1, $3); }
-        | expr '>' expr         { $$ = opr('>', 2, $1, $3); }
-        | expr GE expr          { $$ = opr(GE, 2, $1, $3); }
-        | expr LE expr          { $$ = opr(LE, 2, $1, $3); }
-        | expr NE expr          { $$ = opr(NE, 2, $1, $3); }
-        | expr EQ expr          { $$ = opr(EQ, 2, $1, $3); }
-        | '(' expr ')'          { $$ = $2; }
+          INTEGER                   { $$ = con($1); }
+        | VARIABLE                  { $$ = id($1); }
+        | MINUS expr %prec UMINUS   { $$ = opr(UMINUS, 1, $2); }
+        | expr PLUS expr            { $$ = opr(PLUS, 2, $1, $3); }
+        | expr MINUS expr             { $$ = opr(MINUS, 2, $1, $3); }
+        | expr '*' expr             { $$ = opr('*', 2, $1, $3); }
+        | expr '/' expr             { $$ = opr('/', 2, $1, $3); }
+        | expr '<' expr             { $$ = opr('<', 2, $1, $3); }
+        | expr '>' expr             { $$ = opr('>', 2, $1, $3); }
+        | expr GE expr              { $$ = opr(GE, 2, $1, $3); }
+        | expr LE expr              { $$ = opr(LE, 2, $1, $3); }
+        | expr NE expr              { $$ = opr(NE, 2, $1, $3); }
+        | expr EQ expr              { $$ = opr(EQ, 2, $1, $3); }
+        | '(' expr ')'              { $$ = $2; }
         ;
 
 %%

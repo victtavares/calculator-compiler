@@ -7,10 +7,10 @@ int ex(nodeType *p) {
     if (!p) return 0;
     switch(p->type) {
     case typeCon:       
-        printf("li $a0 %d\n", p->con.value);
+        printf("li $a0, %d\n", p->con.value);
         break;//return p->con.value;
     case typeId:
-        printf("li $a0 %c\n", p->id.i + 'a');      
+        printf("li $a0, %c\n", p->id.i + 'a');      
     //printf("li $a0%d\n", sym[p->id.i]);
         break;//return sym[p->id.i];
     case typeOpr:
@@ -28,15 +28,25 @@ int ex(nodeType *p) {
         case ';':       //ex(p->opr.op[0]); return ex(p->opr.op[1]);
         case '=':       return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
         case UMINUS:    return -ex(p->opr.op[0]);
-        case '+': 
+        case PLUS: 
             ex(p->opr.op[0]);      
-            printf("sw $a0 0($sp)\naddiu $sp $sp -4\n");
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
             ex(p->opr.op[1]);
-            printf("lw $t1 4($sp)\n");
-            printf("add $a0 $t1 $a0 addiu $sp $sp 4\n");
+            printf("lw $t1, 4($sp)\n");
+            printf("add $a0, $t1, $a0\n");
+            printf("addiu $sp, $sp, 4\n");
             break;
-            //return ex(p->opr.op[0]) + ex(p->opr.op[1]);
-        case '-':       return ex(p->opr.op[0]) - ex(p->opr.op[1]);
+
+        case MINUS: 
+            ex(p->opr.op[0]);      
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("sub $a0, $t1, $a0\n");
+            printf("addiu $sp, $sp, 4\n");
+            break;     
         case '*':       return ex(p->opr.op[0]) * ex(p->opr.op[1]);
         case '/':       return ex(p->opr.op[0]) / ex(p->opr.op[1]);
         case '<':       return ex(p->opr.op[0]) < ex(p->opr.op[1]);
