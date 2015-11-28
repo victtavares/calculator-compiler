@@ -24,13 +24,14 @@ int sym[26];                    /* symbol table */
 
 %token <iValue> INTEGER
 %token <sIndex> VARIABLE
-%token PLUS MINUS WHILE IF PRINT 
+%token PLUS MINUS TIMES DIVIDE WHILE IF PRINT
+%token GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL
 %nonassoc IFX
 %nonassoc ELSE
 
-%left GE LE EQ NE '>' '<'
+%left GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL '>' '<'
 %left PLUS MINUS
-%left '*' '/'
+%left TIMES DIVIDE
 %nonassoc UMINUS
 
 %type <nPtr> stmt expr stmt_list
@@ -50,7 +51,7 @@ stmt:
           ';'                            { $$ = opr(';', 2, NULL, NULL); }
         | expr ';'                       { $$ = $1; }
         | PRINT expr ';'                 { $$ = opr(PRINT, 1, $2); }
-        | VARIABLE '=' expr ';'          { $$ = opr('=', 2, id($1), $3); }
+        | VARIABLE '=' expr ';'        { $$ = opr('=', 2, id($1), $3); }
         | WHILE '(' expr ')' stmt        { $$ = opr(WHILE, 2, $3, $5); }
         | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
         | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
@@ -67,15 +68,15 @@ expr:
         | VARIABLE                  { $$ = id($1); }
         | MINUS expr %prec UMINUS   { $$ = opr(UMINUS, 1, $2); }
         | expr PLUS expr            { $$ = opr(PLUS, 2, $1, $3); }
-        | expr MINUS expr             { $$ = opr(MINUS, 2, $1, $3); }
-        | expr '*' expr             { $$ = opr('*', 2, $1, $3); }
-        | expr '/' expr             { $$ = opr('/', 2, $1, $3); }
+        | expr MINUS expr           { $$ = opr(MINUS, 2, $1, $3); }
+        | expr TIMES expr           { $$ = opr(TIMES, 2, $1, $3); }
+        | expr DIVIDE expr          { $$ = opr(DIVIDE, 2, $1, $3); }
         | expr '<' expr             { $$ = opr('<', 2, $1, $3); }
         | expr '>' expr             { $$ = opr('>', 2, $1, $3); }
-        | expr GE expr              { $$ = opr(GE, 2, $1, $3); }
-        | expr LE expr              { $$ = opr(LE, 2, $1, $3); }
-        | expr NE expr              { $$ = opr(NE, 2, $1, $3); }
-        | expr EQ expr              { $$ = opr(EQ, 2, $1, $3); }
+        | expr GREAT_EQUAL expr     { $$ = opr(GREAT_EQUAL, 2, $1, $3); }
+        | expr LESS_EQUAL expr      { $$ = opr(LESS_EQUAL, 2, $1, $3); }
+        | expr NOT_EQUAL expr       { $$ = opr(NOT_EQUAL, 2, $1, $3); }
+        | expr TWO_EQUAL expr       { $$ = opr(TWO_EQUAL, 2, $1, $3); }
         | '(' expr ')'              { $$ = $2; }
         ;
 

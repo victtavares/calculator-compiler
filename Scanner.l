@@ -22,16 +22,22 @@ number          {numberNoZero}|{zero}
             }
 
 
-[()<>=*/;{}.] {
+[()<>=;{}.] {
                 return *yytext;
              }
-
+/* Math Tokens */
 "+"             return PLUS;
 "-"             return MINUS;
-">="            return GE;
-"<="            return LE;
-"=="            return EQ;
-"!="            return NE;
+"*"             return TIMES;
+"/"             return DIVIDE;
+
+/* Comparison Tokens */
+">="            return GREAT_EQUAL;
+"<="            return LESS_EQUAL;
+"=="            return TWO_EQUAL;
+"!="            return NOT_EQUAL;
+
+
 "while"         return WHILE;
 "if"            return IF;
 "else"          return ELSE;

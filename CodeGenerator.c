@@ -47,14 +47,14 @@ int ex(nodeType *p) {
             printf("sub $a0, $t1, $a0\n");
             printf("addiu $sp, $sp, 4\n");
             break;     
-        case '*':       return ex(p->opr.op[0]) * ex(p->opr.op[1]);
-        case '/':       return ex(p->opr.op[0]) / ex(p->opr.op[1]);
-        case '<':       return ex(p->opr.op[0]) < ex(p->opr.op[1]);
-        case '>':       return ex(p->opr.op[0]) > ex(p->opr.op[1]);
-        case GE:        return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
-        case LE:        return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
-        case NE:        return ex(p->opr.op[0]) != ex(p->opr.op[1]);
-        case EQ:        return ex(p->opr.op[0]) == ex(p->opr.op[1]);
+        case TIMES:         return ex(p->opr.op[0]) * ex(p->opr.op[1]);
+        case DIVIDE:        return ex(p->opr.op[0]) / ex(p->opr.op[1]);
+        case '<':           return ex(p->opr.op[0]) < ex(p->opr.op[1]);
+        case '>':           return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+        case GREAT_EQUAL:   return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
+        case LESS_EQUAL:    return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
+        case NOT_EQUAL:     return ex(p->opr.op[0]) != ex(p->opr.op[1]);
+        case TWO_EQUAL:     return ex(p->opr.op[0]) == ex(p->opr.op[1]);
         }
     }
     return 0;

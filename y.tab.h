@@ -43,16 +43,18 @@
      VARIABLE = 259,
      PLUS = 260,
      MINUS = 261,
-     WHILE = 262,
-     IF = 263,
-     PRINT = 264,
-     IFX = 265,
-     ELSE = 266,
-     NE = 267,
-     EQ = 268,
-     LE = 269,
-     GE = 270,
-     UMINUS = 271
+     TIMES = 262,
+     DIVIDE = 263,
+     WHILE = 264,
+     IF = 265,
+     PRINT = 266,
+     GREAT_EQUAL = 267,
+     LESS_EQUAL = 268,
+     TWO_EQUAL = 269,
+     NOT_EQUAL = 270,
+     IFX = 271,
+     ELSE = 272,
+     UMINUS = 273
    };
 #endif
 /* Tokens.  */
@@ -60,16 +62,18 @@
 #define VARIABLE 259
 #define PLUS 260
 #define MINUS 261
-#define WHILE 262
-#define IF 263
-#define PRINT 264
-#define IFX 265
-#define ELSE 266
-#define NE 267
-#define EQ 268
-#define LE 269
-#define GE 270
-#define UMINUS 271
+#define TIMES 262
+#define DIVIDE 263
+#define WHILE 264
+#define IF 265
+#define PRINT 266
+#define GREAT_EQUAL 267
+#define LESS_EQUAL 268
+#define TWO_EQUAL 269
+#define NOT_EQUAL 270
+#define IFX 271
+#define ELSE 272
+#define UMINUS 273
 
 
 
@@ -83,7 +87,7 @@ typedef union YYSTYPE
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 1529 of yacc.c.  */
-#line 87 "y.tab.h"
+#line 91 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
