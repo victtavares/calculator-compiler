@@ -1,6 +1,5 @@
-#line 2 "parser.lex.c"
 
-#line 4 "parser.lex.c"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -549,13 +548,13 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "luaScanner.l"
 #line 2 "luaScanner.l"
-   #define YYSTYPE double
    #include <stdlib.h>
    #include "luaParser.tab.h"
+   #include "AST.h"
 /* -- qualquer coisa exceção o ] e então o ]*/
 /*  Aspas seguidas de zero ou mais (qualquer caracter que não é uma aspas ou backslash) ou (uma backslash seguida de qualquer coisa)*/
 /* falta string com ==[]=== */
-#line 559 "parser.lex.c"
+#line 558 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -740,7 +739,7 @@ YY_DECL
 #line 24 "luaScanner.l"
 
 
-#line 744 "parser.lex.c"
+#line 743 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -838,7 +837,7 @@ YY_RULE_SETUP
 case 3:
 YY_RULE_SETUP
 #line 28 "luaScanner.l"
-{ yylval = atof(yytext);  return NUMBER; }
+{ yylval.number_value = atof(yytext);  return NUMBER; }
 	YY_BREAK
 case 4:
 /* rule 4 can match eol */
@@ -1066,7 +1065,7 @@ printf("Item lexico: %s\n", yytext);
 case 48:
 YY_RULE_SETUP
 #line 77 "luaScanner.l"
-return END;
+printf("Item lexico: %s\n", yytext);
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
@@ -1108,7 +1107,7 @@ YY_RULE_SETUP
 #line 91 "luaScanner.l"
 ECHO;
 	YY_BREAK
-#line 1112 "parser.lex.c"
+#line 1111 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2123,5 +2122,3 @@ char **argv;
     yylex();
 }
 */
-
-

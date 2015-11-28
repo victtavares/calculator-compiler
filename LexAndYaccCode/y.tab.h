@@ -39,31 +39,11 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     NUMBER = 258,
-     PLUS = 259,
-     MINUS = 260,
-     TIMES = 261,
-     DIVIDE = 262,
-     POWER = 263,
-     MOD = 264,
-     OPEN_PARENTHESES = 265,
-     CLOSE_PARENTHESES = 266,
-     END = 267,
-     NEG = 268
+     INTEGER = 258
    };
 #endif
 /* Tokens.  */
-#define NUMBER 258
-#define PLUS 259
-#define MINUS 260
-#define TIMES 261
-#define DIVIDE 262
-#define POWER 263
-#define MOD 264
-#define OPEN_PARENTHESES 265
-#define CLOSE_PARENTHESES 266
-#define END 267
-#define NEG 268
+#define INTEGER 258
 
 
 

@@ -1,7 +1,7 @@
 %{
-   #define YYSTYPE double
    #include <stdlib.h>
    #include "luaParser.tab.h"
+   #include "AST.h"
 %}
 
 whitespace      ([ \t\n\r\f])+
@@ -25,7 +25,7 @@ stringAspasDuplas   \"([^"\\]|\\.)*\"
 
 {commentLine}         printf("comment: %s\n", yytext);
 {whitespace}          {/* Do Nothing */}
-{number}              { yylval = atof(yytext);  return NUMBER; }
+{number}              { yylval.number_value = atof(yytext);  return NUMBER; }
 {commentMultiLine}    printf("comment multiline: %s\n", yytext);
 {stringAspasSimples}  printf("stringAspasSimples: %s\n", yytext);
 {stringAspasDuplas}   printf("stringAspasDuplas: %s\n", yytext);
@@ -74,7 +74,7 @@ while           printf("keyword: %s\n", yytext);
 "}"             printf("Item lexico: %s\n", yytext);
 "["             printf("Item lexico: %s\n", yytext);
 "]"             printf("Item lexico: %s\n", yytext);
-";"             return END;
+";"             printf("Item lexico: %s\n", yytext);
 ":"             printf("Item lexico: %s\n", yytext);
 ","             printf("Item lexico: %s\n", yytext);
 "."             printf("Item lexico: %s\n", yytext);
@@ -104,4 +104,3 @@ char **argv;
     yylex();
 }
 */
-
