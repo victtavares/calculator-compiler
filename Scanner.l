@@ -10,22 +10,17 @@ letter          [A-Za-z]
 digit           [0-9]
 id              ({letter}|_)({letter}|({digit}|_))*
 
+numberNoZero    [1-9][0-9]*
+zero            0
+number          {numberNoZero}|{zero}
 %%
 
-[a-z]       { 
-                yylval.sIndex = *yytext - 'a';
-                return VARIABLE;
-            }
 
-0           {
+{number}    {
                 yylval.iValue = atoi(yytext);
                 return INTEGER;
             }
 
-[1-9][0-9]* {
-                yylval.iValue = atoi(yytext);
-                return INTEGER;
-            }
 
 [-()<>=+*/;{}.] {
                 return *yytext;
@@ -41,6 +36,11 @@ id              ({letter}|_)({letter}|({digit}|_))*
 "print"         return PRINT;
 
 [ \t\n]+        ;       /* ignore whitespace */
+
+{id}        { 
+                yylval.sIndex = *yytext - 'a';
+                return VARIABLE;
+            }
 
 .               yyerror("Unknown character");
 %%
