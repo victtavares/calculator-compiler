@@ -5,9 +5,9 @@
 #include "Structure.h"
 
 /* prototypes */
-nodeType *opr(int oper, int nops, ...);
-nodeType *id(int i);
-nodeType *con(int value);
+nodeType *createOpr(int oper, int nops, ...);
+nodeType *createIdentifier(int i);
+nodeType *createConstant(int value);
 void freeNode(nodeType *p);
 int ex(nodeType *p);
 int yylex(void);
@@ -50,76 +50,76 @@ block:
 
 
 command:
-        END_LINE                           { $$ = opr(END_LINE, 2, NULL, NULL); }
+        END_LINE                           { $$ = createOpr(END_LINE, 2, NULL, NULL); }
         | expr END_LINE                    { $$ = $1; }
-        | VARIABLE EQUAL expr END_LINE     { $$ = opr(EQUAL, 2, id($1), $3); }
+        | VARIABLE EQUAL expr END_LINE     { $$ = createOpr(EQUAL, 2, createIdentifier($1), $3); }
         | functionCall   END_LINE
         | assignVariable END_LINE          { $$ = $1; }
-        | WHILE expr DO command END         { $$ = opr(WHILE, 2, $2, $4); }
-        | IF expr THEN command  %prec IFX   { $$ = opr(IF, 2, $2, $4); }
-        | IF expr THEN command ELSE command { $$ = opr(IF, 3, $2, $4, $6);  }
+        | WHILE expr DO command END         { $$ = createOpr(WHILE, 2, $2, $4); }
+        | IF expr THEN command  %prec IFX   { $$ = createOpr(IF, 2, $2, $4); }
+        | IF expr THEN command ELSE command { $$ = createOpr(IF, 3, $2, $4, $6);  }
         ;
 
 functionCall:
-        PRINT OPEN_PAREN expr CLOSE_PAREN { $$ = opr(PRINT, 1, $3); }
+        PRINT OPEN_PAREN expr CLOSE_PAREN { $$ = createOpr(PRINT, 1, $3); }
         ;
 
 assignVariable:
-        VAR VARIABLE              {{ $$ = id($2); }}
-        | VAR VARIABLE EQUAL expr  { $$ = opr(EQUAL, 2, id($2), $4); }
+        VAR VARIABLE              {{ $$ = createIdentifier($2); }}
+        | VAR VARIABLE EQUAL expr  { $$ = createOpr(EQUAL, 2, createIdentifier($2), $4); }
          
 
 expr:
-          INTEGER                       { $$ = con($1); }
-        | VARIABLE                      { $$ = id($1); }
-        | MINUS expr %prec UMINUS       { $$ = opr(UMINUS, 1, $2); }
-        | expr PLUS expr                { $$ = opr(PLUS, 2, $1, $3); }
-        | expr MINUS expr               { $$ = opr(MINUS, 2, $1, $3); }
-        | expr TIMES expr               { $$ = opr(TIMES, 2, $1, $3); }
-        | expr DIVIDE expr              { $$ = opr(DIVIDE, 2, $1, $3); }
-        | expr LESS_THAN expr           { $$ = opr(LESS_THAN, 2, $1, $3); }
-        | expr LESS_EQUAL expr          { $$ = opr(LESS_EQUAL, 2, $1, $3); }
-        | expr GREATER_THAN expr        { $$ = opr(GREATER_THAN, 2, $1, $3); }
-        | expr GREAT_EQUAL expr         { $$ = opr(GREAT_EQUAL, 2, $1, $3); }
-        | expr TWO_EQUAL expr           { $$ = opr(TWO_EQUAL, 2, $1, $3); }
-        | expr NOT_EQUAL expr           { $$ = opr(NOT_EQUAL, 2, $1, $3); }
-        | expr AND expr                 { $$ = opr(AND, 2, $1, $3); }
-        | expr OR expr                  { $$ = opr(OR, 2, $1, $3); }
+          INTEGER                       { $$ = createConstant($1); }
+        | VARIABLE                      { $$ = createIdentifier($1); }
+        | MINUS expr %prec UMINUS       { $$ = createOpr(UMINUS, 1, $2); }
+        | expr PLUS expr                { $$ = createOpr(PLUS, 2, $1, $3); }
+        | expr MINUS expr               { $$ = createOpr(MINUS, 2, $1, $3); }
+        | expr TIMES expr               { $$ = createOpr(TIMES, 2, $1, $3); }
+        | expr DIVIDE expr              { $$ = createOpr(DIVIDE, 2, $1, $3); }
+        | expr LESS_THAN expr           { $$ = createOpr(LESS_THAN, 2, $1, $3); }
+        | expr LESS_EQUAL expr          { $$ = createOpr(LESS_EQUAL, 2, $1, $3); }
+        | expr GREATER_THAN expr        { $$ = createOpr(GREATER_THAN, 2, $1, $3); }
+        | expr GREAT_EQUAL expr         { $$ = createOpr(GREAT_EQUAL, 2, $1, $3); }
+        | expr TWO_EQUAL expr           { $$ = createOpr(TWO_EQUAL, 2, $1, $3); }
+        | expr NOT_EQUAL expr           { $$ = createOpr(NOT_EQUAL, 2, $1, $3); }
+        | expr AND expr                 { $$ = createOpr(AND, 2, $1, $3); }
+        | expr OR expr                  { $$ = createOpr(OR, 2, $1, $3); }
         | OPEN_PAREN expr CLOSE_PAREN   { $$ = $2; }
-        | NOT expr                      { $$ = opr(UMINUS, 1, $2); }
+        | NOT expr                      { $$ = createOpr(UMINUS, 1, $2); }
         ;
 
 %%
 
-nodeType *con(int value) {
+nodeType *createConstant(int value) {
+    nodeType *p;
+
+    /* allocate node and shows memory error if necessary*/
+    if ((p = malloc(sizeof(nodeType))) == NULL)
+        yyerror("out of memory");
+
+    /* put the data on the node*/
+    p->type = typeConstant;
+    p->constant.value = value;
+
+    return p;
+}
+
+nodeType *createIdentifier(int identifier) {
     nodeType *p;
 
     /* allocate node */
     if ((p = malloc(sizeof(nodeType))) == NULL)
         yyerror("out of memory");
 
-    /* copy information */
-    p->type = typeCon;
-    p->con.value = value;
+    /* put the data on the node*/
+    p->type = typeIdentifier;
+    p->identifier.value = identifier;
 
     return p;
 }
 
-nodeType *id(int i) {
-    nodeType *p;
-
-    /* allocate node */
-    if ((p = malloc(sizeof(nodeType))) == NULL)
-        yyerror("out of memory");
-
-    /* copy information */
-    p->type = typeId;
-    p->id.i = i;
-
-    return p;
-}
-
-nodeType *opr(int oper, int nops, ...) {
+nodeType *createOpr(int operator, int numberOfOperands, ...) {
     va_list ap;
     nodeType *p;
     int i;
@@ -127,28 +127,30 @@ nodeType *opr(int oper, int nops, ...) {
     /* allocate node */
     if ((p = malloc(sizeof(nodeType))) == NULL)
         yyerror("out of memory");
-    if ((p->opr.op = malloc(nops * sizeof(nodeType *))) == NULL)
+    if ((p->opr.operands = malloc(numberOfOperands * sizeof(nodeType *))) == NULL)
         yyerror("out of memory");
 
-    /* copy information */
+    /* put the data on the node*/
     p->type = typeOpr;
-    p->opr.oper = oper;
-    p->opr.nops = nops;
-    va_start(ap, nops);
-    for (i = 0; i < nops; i++)
-        p->opr.op[i] = va_arg(ap, nodeType*);
+    p->opr.operator = operator;
+    p->opr.numberOfOperands = numberOfOperands;
+    va_start(ap, numberOfOperands);
+    for (i = 0; i < numberOfOperands; i++)
+        p->opr.operands[i] = va_arg(ap, nodeType*);
     va_end(ap);
     return p;
 }
 
+/* freeing the node from memory */
 void freeNode(nodeType *p) {
     int i;
 
     if (!p) return;
+    //if the type is an operand, clear the operands too
     if (p->type == typeOpr) {
-        for (i = 0; i < p->opr.nops; i++)
-            freeNode(p->opr.op[i]);
-		free (p->opr.op);
+        for (i = 0; i < p->opr.numberOfOperands; i++)
+            freeNode(p->opr.operands[i]);
+		free (p->opr.operands);
     }
     free (p);
 }
