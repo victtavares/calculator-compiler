@@ -2,7 +2,9 @@
 #include "Structure.h"
 #include "y.tab.h"
 
-
+char *label1 = "label1";
+char *label2 = "label2";
+ 
 int ex(nodeType *p) {
     if (!p) return 0;
     switch(p->type) {
@@ -15,7 +17,14 @@ int ex(nodeType *p) {
 
     case typeOpr:
         switch(p->opr.oper) {
-        // case WHILE:     while(ex(p->opr.op[0])) ex(p->opr.op[1]); return 0;
+        case WHILE:
+            strcpy(label1, "loop");
+            strcpy(label2, "exit");
+            ex(p->opr.op[0]);
+            ex(p->opr.op[1]);
+            printf("j %s\n", label1);
+            printf("%s:\n", label2);
+            
         // case IF:        if (ex(p->opr.op[0]))
         //                     ex(p->opr.op[1]);
         //                 else if (p->opr.nops > 2)
@@ -51,10 +60,18 @@ int ex(nodeType *p) {
         // case DIVIDE:        return ex(p->opr.op[0]) / ex(p->opr.op[1]);
         // case LESS_THAN:     return ex(p->opr.op[0]) < ex(p->opr.op[1]);
         // case GREATER_THAN:  return ex(p->opr.op[0]) > ex(p->opr.op[1]);
-        // case GREAT_EQUAL:   return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
+        case GREAT_EQUAL:
+            ex(p->opr.op[0]);
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("%s:\n", label1); 
+            printf("bge $a0, $t1, %s\n", label2);
         // case LESS_EQUAL:    return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
         // case NOT_EQUAL:     return ex(p->opr.op[0]) != ex(p->opr.op[1]);
-        // case TWO_EQUAL:     return ex(p->opr.op[0]) == ex(p->opr.op[1]);
+        case TWO_EQUAL:     
+    	    return ex(p->opr.op[0]) == ex(p->opr.op[1]);
         }
     }
     return 0;
