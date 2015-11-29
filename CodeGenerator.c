@@ -1,9 +1,10 @@
 #include <stdio.h>
+#include <string.h>
 #include "Structure.h"
 #include "y.tab.h"
 
-char *label1 = "label1";
-char *label2 = "label2";
+int count = 0;
+char condition[4];
  
 int ex(nodeType *p) {
     if (!p) return 0;
@@ -18,14 +19,29 @@ int ex(nodeType *p) {
     case typeOpr:
         switch(p->opr.oper) {
         case WHILE:
-            strcpy(label1, "loop");
-            strcpy(label2, "exit");
             ex(p->opr.op[0]);
+            printf("LOOP%d:\n", count);
+            printf("%s $a0, $t1, ENTRY%d\n", condition, count);
+            printf("j END_LOOP%d\n", count);
+            printf("ENTRY%d:\n", count);
             ex(p->opr.op[1]);
-            printf("j %s\n", label1);
-            printf("%s:\n", label2);
+            printf("j LOOP%d\n", count);
+            printf("END_LOOP%d:\n", count);
+            count = count + 1;
+            break;
             
-        // case IF:        if (ex(p->opr.op[0]))
+        case IF:
+            ex(p->opr.op[0]);
+            printf("%s $a0, $t1, ENTRY%d\n", condition, count);
+            if (p->opr.nops > 2) ex(p->opr.op[2]);
+            printf("j ELSE%d\n", count);
+            printf("ENTRY%d:\n", count);
+            ex(p->opr.op[1]);
+            printf("ELSE%d:\n", count);
+            break;
+            
+                   
+        //    if (ex(p->opr.op[0]))
         //                     ex(p->opr.op[1]);
         //                 else if (p->opr.nops > 2)
         //                     ex(p->opr.op[2]);
@@ -56,22 +72,70 @@ int ex(nodeType *p) {
             printf("sub $a0, $t1, $a0\n");
             printf("addiu $sp, $sp, 4\n");
             break;     
-        // case TIMES:         return ex(p->opr.op[0]) * ex(p->opr.op[1]);
-        // case DIVIDE:        return ex(p->opr.op[0]) / ex(p->opr.op[1]);
-        // case LESS_THAN:     return ex(p->opr.op[0]) < ex(p->opr.op[1]);
-        // case GREATER_THAN:  return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+        case TIMES:
+            ex(p->opr.op[0]);      
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("mul $a0, $t1, $a0\n");
+            printf("addiu $sp, $sp, 4\n");      
+        case DIVIDE:
+            ex(p->opr.op[0]);      
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("div $a0, $t1, $a0\n");
+            printf("addiu $sp, $sp, 4\n");        
+        case LESS_THAN:     return ex(p->opr.op[0]) < ex(p->opr.op[1]);
+            ex(p->opr.op[0]);      
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("addiu $sp, $sp, 4\n");
+            strcpy(condition,"blt");
+        case GREATER_THAN:  return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+            ex(p->opr.op[0]);      
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("addiu $sp, $sp, 4\n");
+            strcpy(condition,"bgt");
         case GREAT_EQUAL:
             ex(p->opr.op[0]);
             printf("sw $a0, 0($sp)\n");
             printf("addiu $sp, $sp -4\n");
             ex(p->opr.op[1]);
             printf("lw $t1, 4($sp)\n");
-            printf("%s:\n", label1); 
-            printf("bge $a0, $t1, %s\n", label2);
-        // case LESS_EQUAL:    return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
-        // case NOT_EQUAL:     return ex(p->opr.op[0]) != ex(p->opr.op[1]);
-        case TWO_EQUAL:     
-    	    return ex(p->opr.op[0]) == ex(p->opr.op[1]);
+            printf("addiu $sp, $sp, 4\n");
+            strcpy(condition,"bne");
+        case LESS_EQUAL:    
+            ex(p->opr.op[0]);
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("addiu $sp, $sp, 4\n");
+            strcpy(condition,"ble");
+        case NOT_EQUAL:
+            ex(p->opr.op[0]);
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("addiu $sp, $sp, 4\n");
+            strcpy(condition,"bne");
+        case TWO_EQUAL:
+            ex(p->opr.op[0]);
+            printf("sw $a0, 0($sp)\n");
+            printf("addiu $sp, $sp -4\n");
+            ex(p->opr.op[1]);
+            printf("lw $t1, 4($sp)\n");
+            printf("addiu $sp, $sp, 4\n");
+            strcpy(condition,"beq"); 
         }
     }
     return 0;
