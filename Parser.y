@@ -24,45 +24,50 @@ int sym[26];                    /* symbol table */
 
 %token <iValue> INTEGER
 %token <sIndex> VARIABLE
-%token PLUS MINUS TIMES DIVIDE WHILE IF PRINT
-%token GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL ALMOST_EQUAL
-%token OPEN_PAREN CLOSE_PAREN EQUAL DOT_COMMA
+%token PLUS MINUS TIMES DIVIDE PRINT
+%token GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL LESS_THAN GREATER_THAN 
+%token OPEN_PAREN CLOSE_PAREN EQUAL END_LINE
+%token AND DO ELSE WHILE THEN END FOR IF VAR OR NOT
+%token print
+
 %nonassoc IFX
 %nonassoc ELSE
 
-%left GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL GREATER_THAN LESS_THAN 
+%left AND OR
+%left GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL GREATER_THAN LESS_THAN
 %left PLUS MINUS
 %left TIMES DIVIDE
-%nonassoc UMINUS
+%right NOT
+%right UMINUS
 
-%type <nPtr> stmt expr stmt_list
+ %type <nPtr> command expr functionCall assignVariable
 
 %%
-
-program:
-        function                { exit(0); }
+block:
+        block command     { ex($2); freeNode($2); }
+        | 
         ;
 
-function:
-          function stmt         { ex($2); freeNode($2); }
-        | /* NULL */
+
+command:
+        END_LINE                           { $$ = opr(END_LINE, 2, NULL, NULL); }
+        | expr END_LINE                    { $$ = $1; }
+        | VARIABLE EQUAL expr END_LINE     { $$ = opr(EQUAL, 2, id($1), $3); }
+        | functionCall   END_LINE
+        | assignVariable END_LINE          { $$ = $1; }
+        | WHILE expr DO command END         { $$ = opr(WHILE, 2, $2, $4); }
+        | IF expr THEN command  %prec IFX   { $$ = opr(IF, 2, $2, $4); }
+        | IF expr THEN command ELSE command { $$ = opr(IF, 3, $2, $4, $6);  }
         ;
 
-stmt:
-          DOT_COMMA                                         { $$ = opr(DOT_COMMA, 2, NULL, NULL); }
-        | expr DOT_COMMA                                    { $$ = $1; }
-        | PRINT expr DOT_COMMA                              { $$ = opr(PRINT, 1, $2); }
-        | VARIABLE EQUAL expr DOT_COMMA                     { $$ = opr(EQUAL, 2, id($1), $3); }
-        | WHILE OPEN_PAREN expr OPEN_PAREN stmt             { $$ = opr(WHILE, 2, $3, $5); }
-        | IF OPEN_PAREN expr OPEN_PAREN stmt %prec IFX      { $$ = opr(IF, 2, $3, $5); }
-        | IF OPEN_PAREN expr OPEN_PAREN stmt ELSE stmt      { $$ = opr(IF, 3, $3, $5, $7); }
-        | '{' stmt_list '}'              { $$ = $2; }
+functionCall:
+        PRINT OPEN_PAREN expr CLOSE_PAREN { $$ = opr(PRINT, 1, $3); }
         ;
 
-stmt_list:
-          stmt                  { $$ = $1; }
-        | stmt_list stmt        { $$ = opr(';', 2, $1, $2); }
-        ;
+assignVariable:
+        VAR VARIABLE              {{ $$ = id($2); }}
+        | VAR VARIABLE EQUAL expr  { $$ = opr(EQUAL, 2, id($2), $4); }
+         
 
 expr:
           INTEGER                       { $$ = con($1); }
@@ -72,13 +77,16 @@ expr:
         | expr MINUS expr               { $$ = opr(MINUS, 2, $1, $3); }
         | expr TIMES expr               { $$ = opr(TIMES, 2, $1, $3); }
         | expr DIVIDE expr              { $$ = opr(DIVIDE, 2, $1, $3); }
-        | expr GREATER_THAN expr        { $$ = opr(GREATER_THAN, 2, $1, $3); }
         | expr LESS_THAN expr           { $$ = opr(LESS_THAN, 2, $1, $3); }
-        | expr GREAT_EQUAL expr         { $$ = opr(GREAT_EQUAL, 2, $1, $3); }
         | expr LESS_EQUAL expr          { $$ = opr(LESS_EQUAL, 2, $1, $3); }
-        | expr NOT_EQUAL expr           { $$ = opr(NOT_EQUAL, 2, $1, $3); }
+        | expr GREATER_THAN expr        { $$ = opr(GREATER_THAN, 2, $1, $3); }
+        | expr GREAT_EQUAL expr         { $$ = opr(GREAT_EQUAL, 2, $1, $3); }
         | expr TWO_EQUAL expr           { $$ = opr(TWO_EQUAL, 2, $1, $3); }
+        | expr NOT_EQUAL expr           { $$ = opr(NOT_EQUAL, 2, $1, $3); }
+        | expr AND expr                 { $$ = opr(AND, 2, $1, $3); }
+        | expr OR expr                  { $$ = opr(OR, 2, $1, $3); }
         | OPEN_PAREN expr CLOSE_PAREN   { $$ = $2; }
+        | NOT expr                      { $$ = opr(UMINUS, 1, $2); }
         ;
 
 %%

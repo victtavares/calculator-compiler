@@ -21,11 +21,6 @@ number          {numberNoZero}|{zero}
                 return INTEGER;
             }
 
-
-[{}] {
-                return *yytext;
-             }
-
 "+"             return PLUS;
 "-"             return MINUS;
 "*"             return TIMES;
@@ -35,27 +30,37 @@ number          {numberNoZero}|{zero}
 ">="            return GREAT_EQUAL;
 "<="            return LESS_EQUAL;
 "=="            return TWO_EQUAL;
-"!="            return NOT_EQUAL;
+"~="            return NOT_EQUAL;
 ">"             return GREATER_THAN;
 "<"             return LESS_THAN;
-"~="            return ALMOST_EQUAL;
 
 
 "("             return OPEN_PAREN;
 ")"             return CLOSE_PAREN;
 "="             return EQUAL;
-";"             return DOT_COMMA;
 
-
-
-"while"         return WHILE;
-"if"            return IF;
+"and"           return AND;
+"do"            return DO;
 "else"          return ELSE;
+"while"         return WHILE;
+"then"          return THEN;
+"end"           return END;
+"for"           return FOR;
+"if"            return IF;
+"var"           return VAR;
+"or"            return OR;
+"not"           return NOT;
 
 
 "print"         return PRINT;
 
-[ \t\n]+        ;       /* ignoring whitespace */
+[;\n]           return END_LINE;
+
+[{}]         {
+                return *yytext;
+             }
+
+[ \t]+        ;       /* ignoring whitespace */
 
 {id}        { 
                 yylval.sIndex = *yytext - 'a';

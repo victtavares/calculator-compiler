@@ -45,23 +45,31 @@
      MINUS = 261,
      TIMES = 262,
      DIVIDE = 263,
-     WHILE = 264,
-     IF = 265,
-     PRINT = 266,
-     GREAT_EQUAL = 267,
-     LESS_EQUAL = 268,
-     TWO_EQUAL = 269,
-     NOT_EQUAL = 270,
-     ALMOST_EQUAL = 271,
-     OPEN_PAREN = 272,
-     CLOSE_PAREN = 273,
-     EQUAL = 274,
-     DOT_COMMA = 275,
-     IFX = 276,
+     PRINT = 264,
+     GREAT_EQUAL = 265,
+     LESS_EQUAL = 266,
+     TWO_EQUAL = 267,
+     NOT_EQUAL = 268,
+     LESS_THAN = 269,
+     GREATER_THAN = 270,
+     OPEN_PAREN = 271,
+     CLOSE_PAREN = 272,
+     EQUAL = 273,
+     END_LINE = 274,
+     AND = 275,
+     DO = 276,
      ELSE = 277,
-     LESS_THAN = 278,
-     GREATER_THAN = 279,
-     UMINUS = 280
+     WHILE = 278,
+     THEN = 279,
+     END = 280,
+     FOR = 281,
+     IF = 282,
+     VAR = 283,
+     OR = 284,
+     NOT = 285,
+     print = 286,
+     IFX = 287,
+     UMINUS = 288
    };
 #endif
 /* Tokens.  */
@@ -71,23 +79,31 @@
 #define MINUS 261
 #define TIMES 262
 #define DIVIDE 263
-#define WHILE 264
-#define IF 265
-#define PRINT 266
-#define GREAT_EQUAL 267
-#define LESS_EQUAL 268
-#define TWO_EQUAL 269
-#define NOT_EQUAL 270
-#define ALMOST_EQUAL 271
-#define OPEN_PAREN 272
-#define CLOSE_PAREN 273
-#define EQUAL 274
-#define DOT_COMMA 275
-#define IFX 276
+#define PRINT 264
+#define GREAT_EQUAL 265
+#define LESS_EQUAL 266
+#define TWO_EQUAL 267
+#define NOT_EQUAL 268
+#define LESS_THAN 269
+#define GREATER_THAN 270
+#define OPEN_PAREN 271
+#define CLOSE_PAREN 272
+#define EQUAL 273
+#define END_LINE 274
+#define AND 275
+#define DO 276
 #define ELSE 277
-#define LESS_THAN 278
-#define GREATER_THAN 279
-#define UMINUS 280
+#define WHILE 278
+#define THEN 279
+#define END 280
+#define FOR 281
+#define IF 282
+#define VAR 283
+#define OR 284
+#define NOT 285
+#define print 286
+#define IFX 287
+#define UMINUS 288
 
 
 
@@ -101,7 +117,7 @@ typedef union YYSTYPE
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 1529 of yacc.c.  */
-#line 105 "y.tab.h"
+#line 121 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
