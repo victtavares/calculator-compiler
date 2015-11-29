@@ -9,7 +9,7 @@ nodeType *createOpr(int oper, int nops, ...);
 nodeType *createIdentifier(int i);
 nodeType *createConstant(int value);
 void freeNode(nodeType *p);
-int ex(nodeType *p);
+int generateMips(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
@@ -44,7 +44,7 @@ int sym[26];                    /* symbol table */
 
 %%
 block:
-        block command     { ex($2); freeNode($2); }
+        block command     { generateMips($2); freeNode($2); }
         | 
         ;
 
@@ -65,7 +65,7 @@ functionCall:
         ;
 
 assignVariable:
-        VAR VARIABLE              {{ $$ = createIdentifier($2); }}
+        VAR VARIABLE              {{ $$ = createOpr(EQUAL, 2, createIdentifier($2), 0); }}
         | VAR VARIABLE EQUAL expr  { $$ = createOpr(EQUAL, 2, createIdentifier($2), $4); }
          
 

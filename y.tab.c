@@ -148,7 +148,7 @@ nodeType *createOpr(int oper, int nops, ...);
 nodeType *createIdentifier(int i);
 nodeType *createConstant(int value);
 void freeNode(nodeType *p);
-int ex(nodeType *p);
+int generateMips(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
@@ -1471,7 +1471,7 @@ yyreduce:
     {
         case 2:
 #line 47 "Parser.y"
-    { ex((yyvsp[(2) - (2)].nPtr)); freeNode((yyvsp[(2) - (2)].nPtr)); }
+    { generateMips((yyvsp[(2) - (2)].nPtr)); freeNode((yyvsp[(2) - (2)].nPtr)); }
     break;
 
   case 4:
@@ -1516,7 +1516,7 @@ yyreduce:
 
   case 13:
 #line 68 "Parser.y"
-    {{ (yyval.nPtr) = createIdentifier((yyvsp[(2) - (2)].sIndex)); }}
+    {{ (yyval.nPtr) = createOpr(EQUAL, 2, createIdentifier((yyvsp[(2) - (2)].sIndex)), 0); }}
     break;
 
   case 14:
