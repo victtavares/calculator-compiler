@@ -25,11 +25,12 @@ int sym[26];                    /* symbol table */
 %token <iValue> INTEGER
 %token <sIndex> VARIABLE
 %token PLUS MINUS TIMES DIVIDE WHILE IF PRINT
-%token GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL
+%token GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL ALMOST_EQUAL
+%token OPEN_PAREN CLOSE_PAREN EQUAL DOT_COMMA
 %nonassoc IFX
 %nonassoc ELSE
 
-%left GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL '>' '<'
+%left GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL GREATER_THAN LESS_THAN 
 %left PLUS MINUS
 %left TIMES DIVIDE
 %nonassoc UMINUS
@@ -48,13 +49,13 @@ function:
         ;
 
 stmt:
-          ';'                            { $$ = opr(';', 2, NULL, NULL); }
-        | expr ';'                       { $$ = $1; }
-        | PRINT expr ';'                 { $$ = opr(PRINT, 1, $2); }
-        | VARIABLE '=' expr ';'        { $$ = opr('=', 2, id($1), $3); }
-        | WHILE '(' expr ')' stmt        { $$ = opr(WHILE, 2, $3, $5); }
-        | IF '(' expr ')' stmt %prec IFX { $$ = opr(IF, 2, $3, $5); }
-        | IF '(' expr ')' stmt ELSE stmt { $$ = opr(IF, 3, $3, $5, $7); }
+          DOT_COMMA                                         { $$ = opr(DOT_COMMA, 2, NULL, NULL); }
+        | expr DOT_COMMA                                    { $$ = $1; }
+        | PRINT expr DOT_COMMA                              { $$ = opr(PRINT, 1, $2); }
+        | VARIABLE EQUAL expr DOT_COMMA                     { $$ = opr(EQUAL, 2, id($1), $3); }
+        | WHILE OPEN_PAREN expr OPEN_PAREN stmt             { $$ = opr(WHILE, 2, $3, $5); }
+        | IF OPEN_PAREN expr OPEN_PAREN stmt %prec IFX      { $$ = opr(IF, 2, $3, $5); }
+        | IF OPEN_PAREN expr OPEN_PAREN stmt ELSE stmt      { $$ = opr(IF, 3, $3, $5, $7); }
         | '{' stmt_list '}'              { $$ = $2; }
         ;
 
@@ -64,20 +65,20 @@ stmt_list:
         ;
 
 expr:
-          INTEGER                   { $$ = con($1); }
-        | VARIABLE                  { $$ = id($1); }
-        | MINUS expr %prec UMINUS   { $$ = opr(UMINUS, 1, $2); }
-        | expr PLUS expr            { $$ = opr(PLUS, 2, $1, $3); }
-        | expr MINUS expr           { $$ = opr(MINUS, 2, $1, $3); }
-        | expr TIMES expr           { $$ = opr(TIMES, 2, $1, $3); }
-        | expr DIVIDE expr          { $$ = opr(DIVIDE, 2, $1, $3); }
-        | expr '<' expr             { $$ = opr('<', 2, $1, $3); }
-        | expr '>' expr             { $$ = opr('>', 2, $1, $3); }
-        | expr GREAT_EQUAL expr     { $$ = opr(GREAT_EQUAL, 2, $1, $3); }
-        | expr LESS_EQUAL expr      { $$ = opr(LESS_EQUAL, 2, $1, $3); }
-        | expr NOT_EQUAL expr       { $$ = opr(NOT_EQUAL, 2, $1, $3); }
-        | expr TWO_EQUAL expr       { $$ = opr(TWO_EQUAL, 2, $1, $3); }
-        | '(' expr ')'              { $$ = $2; }
+          INTEGER                       { $$ = con($1); }
+        | VARIABLE                      { $$ = id($1); }
+        | MINUS expr %prec UMINUS       { $$ = opr(UMINUS, 1, $2); }
+        | expr PLUS expr                { $$ = opr(PLUS, 2, $1, $3); }
+        | expr MINUS expr               { $$ = opr(MINUS, 2, $1, $3); }
+        | expr TIMES expr               { $$ = opr(TIMES, 2, $1, $3); }
+        | expr DIVIDE expr              { $$ = opr(DIVIDE, 2, $1, $3); }
+        | expr GREATER_THAN expr        { $$ = opr(GREATER_THAN, 2, $1, $3); }
+        | expr LESS_THAN expr           { $$ = opr(LESS_THAN, 2, $1, $3); }
+        | expr GREAT_EQUAL expr         { $$ = opr(GREAT_EQUAL, 2, $1, $3); }
+        | expr LESS_EQUAL expr          { $$ = opr(LESS_EQUAL, 2, $1, $3); }
+        | expr NOT_EQUAL expr           { $$ = opr(NOT_EQUAL, 2, $1, $3); }
+        | expr TWO_EQUAL expr           { $$ = opr(TWO_EQUAL, 2, $1, $3); }
+        | OPEN_PAREN expr CLOSE_PAREN   { $$ = $2; }
         ;
 
 %%

@@ -52,9 +52,16 @@
      LESS_EQUAL = 268,
      TWO_EQUAL = 269,
      NOT_EQUAL = 270,
-     IFX = 271,
-     ELSE = 272,
-     UMINUS = 273
+     ALMOST_EQUAL = 271,
+     OPEN_PAREN = 272,
+     CLOSE_PAREN = 273,
+     EQUAL = 274,
+     DOT_COMMA = 275,
+     IFX = 276,
+     ELSE = 277,
+     LESS_THAN = 278,
+     GREATER_THAN = 279,
+     UMINUS = 280
    };
 #endif
 /* Tokens.  */
@@ -71,9 +78,16 @@
 #define LESS_EQUAL 268
 #define TWO_EQUAL 269
 #define NOT_EQUAL 270
-#define IFX 271
-#define ELSE 272
-#define UMINUS 273
+#define ALMOST_EQUAL 271
+#define OPEN_PAREN 272
+#define CLOSE_PAREN 273
+#define EQUAL 274
+#define DOT_COMMA 275
+#define IFX 276
+#define ELSE 277
+#define LESS_THAN 278
+#define GREATER_THAN 279
+#define UMINUS 280
 
 
 
@@ -87,7 +101,7 @@ typedef union YYSTYPE
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 1529 of yacc.c.  */
-#line 91 "y.tab.h"
+#line 105 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

@@ -22,35 +22,47 @@ number          {numberNoZero}|{zero}
             }
 
 
-[()<>=;{}.] {
+[{}] {
                 return *yytext;
              }
-/* Math Tokens */
+
 "+"             return PLUS;
 "-"             return MINUS;
 "*"             return TIMES;
 "/"             return DIVIDE;
 
-/* Comparison Tokens */
+
 ">="            return GREAT_EQUAL;
 "<="            return LESS_EQUAL;
 "=="            return TWO_EQUAL;
 "!="            return NOT_EQUAL;
+">"             return GREATER_THAN;
+"<"             return LESS_THAN;
+"~="            return ALMOST_EQUAL;
+
+
+"("             return OPEN_PAREN;
+")"             return CLOSE_PAREN;
+"="             return EQUAL;
+";"             return DOT_COMMA;
+
 
 
 "while"         return WHILE;
 "if"            return IF;
 "else"          return ELSE;
+
+
 "print"         return PRINT;
 
-[ \t\n]+        ;       /* ignore whitespace */
+[ \t\n]+        ;       /* ignoring whitespace */
 
 {id}        { 
                 yylval.sIndex = *yytext - 'a';
                 return VARIABLE;
             }
 
-.               yyerror("Unknown character");
+.           yyerror("Caracter desconhecido!");
 %%
 int yywrap(void) {
     return 1;

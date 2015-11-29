@@ -13,6 +13,7 @@ int ex(nodeType *p) {
         printf("li $a0, %c\n", p->id.i + 'a');      
     //printf("li $a0%d\n", sym[p->id.i]);
         break;//return sym[p->id.i];
+        
     case typeOpr:
         switch(p->opr.oper) {
         case WHILE:     while(ex(p->opr.op[0])) ex(p->opr.op[1]); return 0;
@@ -25,8 +26,8 @@ int ex(nodeType *p) {
             ex(p->opr.op[0]);
             printf("print\n");
             break;
-        case ';':       //ex(p->opr.op[0]); return ex(p->opr.op[1]);
-        case '=':       return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
+        case DOT_COMMA:       //ex(p->opr.op[0]); return ex(p->opr.op[1]);
+        case EQUAL:       return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
         case UMINUS:    return -ex(p->opr.op[0]);
         case PLUS: 
             ex(p->opr.op[0]);      
@@ -49,8 +50,8 @@ int ex(nodeType *p) {
             break;     
         case TIMES:         return ex(p->opr.op[0]) * ex(p->opr.op[1]);
         case DIVIDE:        return ex(p->opr.op[0]) / ex(p->opr.op[1]);
-        case '<':           return ex(p->opr.op[0]) < ex(p->opr.op[1]);
-        case '>':           return ex(p->opr.op[0]) > ex(p->opr.op[1]);
+        case LESS_THAN:     return ex(p->opr.op[0]) < ex(p->opr.op[1]);
+        case GREATER_THAN:  return ex(p->opr.op[0]) > ex(p->opr.op[1]);
         case GREAT_EQUAL:   return ex(p->opr.op[0]) >= ex(p->opr.op[1]);
         case LESS_EQUAL:    return ex(p->opr.op[0]) <= ex(p->opr.op[1]);
         case NOT_EQUAL:     return ex(p->opr.op[0]) != ex(p->opr.op[1]);
