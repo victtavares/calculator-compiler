@@ -45,29 +45,29 @@
      MINUS = 261,
      TIMES = 262,
      DIVIDE = 263,
-     PRINT = 264,
-     GREAT_EQUAL = 265,
-     LESS_EQUAL = 266,
-     TWO_EQUAL = 267,
-     NOT_EQUAL = 268,
-     LESS_THAN = 269,
-     GREATER_THAN = 270,
-     OPEN_PAREN = 271,
-     CLOSE_PAREN = 272,
-     EQUAL = 273,
-     END_LINE = 274,
-     AND = 275,
-     DO = 276,
-     ELSE = 277,
-     WHILE = 278,
-     THEN = 279,
-     END = 280,
-     FOR = 281,
-     IF = 282,
-     VAR = 283,
-     OR = 284,
-     NOT = 285,
-     print = 286,
+     GREAT_EQUAL = 264,
+     LESS_EQUAL = 265,
+     TWO_EQUAL = 266,
+     NOT_EQUAL = 267,
+     LESS_THAN = 268,
+     GREATER_THAN = 269,
+     OPEN_PAREN = 270,
+     CLOSE_PAREN = 271,
+     EQUAL = 272,
+     END_LINE = 273,
+     AND = 274,
+     DO = 275,
+     ELSE = 276,
+     WHILE = 277,
+     THEN = 278,
+     END = 279,
+     FOR = 280,
+     IF = 281,
+     VAR = 282,
+     OR = 283,
+     NOT = 284,
+     PRINT = 285,
+     EQUALVAR = 286,
      IFX = 287,
      UMINUS = 288
    };
@@ -79,29 +79,29 @@
 #define MINUS 261
 #define TIMES 262
 #define DIVIDE 263
-#define PRINT 264
-#define GREAT_EQUAL 265
-#define LESS_EQUAL 266
-#define TWO_EQUAL 267
-#define NOT_EQUAL 268
-#define LESS_THAN 269
-#define GREATER_THAN 270
-#define OPEN_PAREN 271
-#define CLOSE_PAREN 272
-#define EQUAL 273
-#define END_LINE 274
-#define AND 275
-#define DO 276
-#define ELSE 277
-#define WHILE 278
-#define THEN 279
-#define END 280
-#define FOR 281
-#define IF 282
-#define VAR 283
-#define OR 284
-#define NOT 285
-#define print 286
+#define GREAT_EQUAL 264
+#define LESS_EQUAL 265
+#define TWO_EQUAL 266
+#define NOT_EQUAL 267
+#define LESS_THAN 268
+#define GREATER_THAN 269
+#define OPEN_PAREN 270
+#define CLOSE_PAREN 271
+#define EQUAL 272
+#define END_LINE 273
+#define AND 274
+#define DO 275
+#define ELSE 276
+#define WHILE 277
+#define THEN 278
+#define END 279
+#define FOR 280
+#define IF 281
+#define VAR 282
+#define OR 283
+#define NOT 284
+#define PRINT 285
+#define EQUALVAR 286
 #define IFX 287
 #define UMINUS 288
 
@@ -110,10 +110,10 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 19 "Parser.y"
+#line 21 "Parser.y"
 {
     int iValue;                 /* integer value */
-    char sIndex;                /* symbol table index */
+    char sIndex[255];                /* symbol table index */
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 1529 of yacc.c.  */

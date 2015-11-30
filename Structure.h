@@ -12,7 +12,7 @@ typedef struct {
 
 /* identifier structure */
 typedef struct {
-    int value;                      /* subscript to sym array */
+    char value[255];                      /* subscript to sym array */
 } identifierNodeType;
 
 
@@ -29,3 +29,4 @@ typedef struct nodeTypeTag {
 } nodeType;
 
 extern int sym[26];
+extern int headerWasCreated;

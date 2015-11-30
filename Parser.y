@@ -2,11 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include <string.h>
 #include "Structure.h"
+
 
 /* prototypes */
 nodeType *createOpr(int oper, int nops, ...);
-nodeType *createIdentifier(int i);
+nodeType *createIdentifier(char identifier[255]);
 nodeType *createConstant(int value);
 void freeNode(nodeType *p);
 int generateMips(nodeType *p);
@@ -18,17 +20,18 @@ int sym[26];                    /* symbol table */
 
 %union {
     int iValue;                 /* integer value */
-    char sIndex;                /* symbol table index */
+    char sIndex[255];                /* symbol table index */
     nodeType *nPtr;             /* node pointer */
 };
 
 %token <iValue> INTEGER
 %token <sIndex> VARIABLE
-%token PLUS MINUS TIMES DIVIDE PRINT
+%token PLUS MINUS TIMES DIVIDE 
 %token GREAT_EQUAL LESS_EQUAL TWO_EQUAL NOT_EQUAL LESS_THAN GREATER_THAN 
 %token OPEN_PAREN CLOSE_PAREN EQUAL END_LINE
 %token AND DO ELSE WHILE THEN END FOR IF VAR OR NOT
-%token print
+%token PRINT
+%token EQUALVAR
 
 %nonassoc IFX
 %nonassoc ELSE
@@ -44,8 +47,8 @@ int sym[26];                    /* symbol table */
 
 %%
 block:
-        block command     { generateMips($2); freeNode($2); }
-        | 
+        block command     { generateMips($2); }
+        |                 
         ;
 
 
@@ -65,8 +68,8 @@ functionCall:
         ;
 
 assignVariable:
-        VAR VARIABLE              {{ $$ = createOpr(EQUAL, 2, createIdentifier($2), 0); }}
-        | VAR VARIABLE EQUAL expr  { $$ = createOpr(EQUAL, 2, createIdentifier($2), $4); }
+        VAR VARIABLE %prec EQUALVAR                 { $$ = createOpr(EQUALVAR, 2, createIdentifier($2), createConstant(0)); }
+        | VAR VARIABLE EQUAL expr %prec EQUALVAR    { $$ = createOpr(EQUALVAR, 2, createIdentifier($2), $4); }
          
 
 expr:
@@ -105,7 +108,7 @@ nodeType *createConstant(int value) {
     return p;
 }
 
-nodeType *createIdentifier(int identifier) {
+nodeType *createIdentifier(char identifier[255]) {
     nodeType *p;
 
     /* allocate node */
@@ -114,7 +117,8 @@ nodeType *createIdentifier(int identifier) {
 
     /* put the data on the node*/
     p->type = typeIdentifier;
-    p->identifier.value = identifier;
+    strcpy(p->identifier.value, identifier);
+    //p->identifier.value = identifier;
 
     return p;
 }
@@ -142,24 +146,32 @@ nodeType *createOpr(int operator, int numberOfOperands, ...) {
 }
 
 /* freeing the node from memory */
-void freeNode(nodeType *p) {
-    int i;
+// void freeNode(nodeType *p) {
+//     int i;
 
-    if (!p) return;
-    //if the type is an operand, clear the operands too
-    if (p->type == typeOpr) {
-        for (i = 0; i < p->opr.numberOfOperands; i++)
-            freeNode(p->opr.operands[i]);
-		free (p->opr.operands);
-    }
-    free (p);
-}
+//     if (!p) return;
+//     //if the type is an operand, clear the operands too
+//     if (p->type == typeOpr) {
+//         for (i = 0; i < p->opr.numberOfOperands; i++)
+//             freeNode(p->opr.operands[i]);
+// 		free (p->opr.operands);
+//     }
+//     free (p);
+// }
 
 void yyerror(char *s) {
     fprintf(stdout, "%s\n", s);
 }
 
+void exitFunction() {
+   printf("\nli $v0, 10\n");  
+   printf("syscall\n");
+}
+
 int main(void) {
     yyparse();
+    exitFunction();
     return 0;
+
+
 }
