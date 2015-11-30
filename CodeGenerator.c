@@ -12,27 +12,16 @@ int firstTime = 1;
 nodeType* treeToAssignValue[255];
 char identifierToAssignValue[255][255];
 int count = 0;
+int count2 = 0;
+int countWhile = 0;
 
 //conditional paramater
 char condition[4];
 
-void generateMips(nodeType *tree) {
-
-    // if (firstTime) {
-    //     // printf(".text\n");
-    //     // printf(".globl main\n\n");
-    //     // printf("main:\n\n");
-    //     firstTime = 0;
-    // }
-
-    cgen(tree);
-
-}
-
 
 void cgenAssignVariable(char *variable, nodeType *expression) {
     cgen(expression);
-    printf("  sw $a0, %s\n", variable);
+    fprintf(file,"\tsw $a0, %s\n", variable);
 }
 
 
@@ -42,20 +31,14 @@ void generateHeader(nodeType *tree) {
         && tree->opr.operator != END_LINE) {
 
         //creating the header text
-        printf("  .text\n");
-        printf("  .globl main\n\n");
-        printf("main:\n");
+        fprintf(file,"\t.text\n");
+        fprintf(file,"\t.globl main\n\n");
+        fprintf(file,"main:\n");
 
         headerWasCreated = 1;
         for (int i = 0; i < count; i++) {
             cgenAssignVariable(identifierToAssignValue[i], treeToAssignValue[i]);
         }
-
-
-
-
-        
-
     }  
 }
 
@@ -66,42 +49,51 @@ int cgen(nodeType *p) {
     switch(p->type) {
 
     case typeConstant:  
-        printf("  li $a0, %d\n", p->constant.value);
+        fprintf(file,"\tli $a0, %d\n", p->constant.value);
         break;
     case typeIdentifier:
-        printf("  sw $a0, %s\n", p->identifier.value);      
+        fprintf(file,"\tsw $a0, %s\n", p->identifier.value);      
         break;
 
     case typeOpr:
         switch(p->opr.operator) {
 
         case WHILE:
+            countWhile++;
             cgen(p->opr.operands[0]);
-            printf("LOOP%d:\n", count);
-            printf("%s $a0, $t1, ENTRY%d\n", condition, count);
-            printf("j END_LOOP%d\n", count);
-            printf("ENTRY%d:\n", count);
+            fprintf(file,"LOOP%d:\n", countWhile);
+            fprintf(file,"\t%s $a0, $t1, ENTRY%d\n", condition, countWhile);
+            fprintf(file,"\tb END_LOOP%d\n", countWhile);
+            fprintf(file,"ENTRY%d:\n", countWhile);
+            int oldWhileValue = countWhile;
             cgen(p->opr.operands[1]);
-            printf("j LOOP%d\n", count);
-            printf("END_LOOP%d:\n", count);
-            count = count + 1;
+            fprintf(file,"\tb LOOP%d\n", oldWhileValue);
+            fprintf(file,"END_LOOP%d:\n", oldWhileValue);
             break;
 
         case IF:
             cgen(p->opr.operands[0]);
-            printf("%s $a0, $t1, ENTRY%d\n", condition, count);
-            if (p->opr.numberOfOperands > 2) cgen(p->opr.operands[2]);
-            printf("j ELSE%d\n", count);
-            printf("ENTRY%d:\n", count);
+            count2++;
+            fprintf(file,"\t%s $a0, $t1, true_branch%d\n", condition, count2);
+            if (p->opr.numberOfOperands > 2) {
+                fprintf(file,"false_branch%d:\n", count2);
+                
+                cgen(p->opr.operands[2]);
+                fprintf(file,"\tb end_if\n");
+            }
+
+            fprintf(file,"true_branch%d:\n", count2);
+            int oldValue = count2;
             cgen(p->opr.operands[1]);
-            printf("ELSE%d:\n", count);
+            fprintf(file,"\tend_if%d:\n", oldValue);
+
             break;
 
 
         case PRINT:     
             cgen(p->opr.operands[0]);
-            printf("  li $vo, 1\n");
-            printf("  syscall\n");
+            fprintf(file,"\tli $vo, 1\n");
+            fprintf(file,"\tsyscall\n");
             break;
 
         case EQUAL:
@@ -112,17 +104,18 @@ int cgen(nodeType *p) {
         case EQUALVAR:
 
             if (firstTime) {
-                printf(".data\n");
+                fprintf(file,".data\n");
                 firstTime = 0;
-
             }
-            printf("  %s .word",p->opr.operands[0]->identifier.value);
+
+
+            fprintf(file,"\t%s .word",p->opr.operands[0]->identifier.value);
 
             nodeType *nodeRight =  p->opr.operands[1];
             if (nodeRight->type == typeConstant) {
-                printf(" %d\n", p->opr.operands[1]->constant.value);
+                fprintf(file," %d\n", p->opr.operands[1]->constant.value);
             } else {
-                printf(" 0\n");
+                fprintf(file," 0\n");
                 treeToAssignValue[count] = nodeRight;
                 strcpy(identifierToAssignValue[count], p->opr.operands[0]->identifier.value);
                 count++;
@@ -132,107 +125,107 @@ int cgen(nodeType *p) {
 
         case UMINUS:
             cgen(p->opr.operands[0]);
-            printf("  sub $a0, $zero, $a0\n");
+            fprintf(file,"\tsub $a0, $zero, $a0\n");
             break;
 
         case PLUS: 
             cgen(p->opr.operands[0]);      
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  add $a0, $t1, $a0\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\tadd $a0, $t1, $a0\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             break;
 
         case MINUS: 
             cgen(p->opr.operands[0]);      
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  sub $a0, $t1, $a0\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\tsub $a0, $t1, $a0\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             break;
 
         case TIMES:
             cgen(p->opr.operands[0]);      
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  mul $a0, $t1, $a0\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\tmul $a0, $t1, $a0\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             break;
 
         case DIVIDE:
             cgen(p->opr.operands[0]);      
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  div $a0, $t1, $a0\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\tdiv $a0, $t1, $a0\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             break;
 
 
         case LESS_THAN: 
             cgen(p->opr.operands[0]);      
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             strcpy(condition,"blt");
             break;
 
         case GREATER_THAN:  
             cgen(p->opr.operands[0]);      
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             strcpy(condition,"bgt");
             break;
 
         case GREAT_EQUAL:
             cgen(p->opr.operands[0]);
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             strcpy(condition,"bne");
             break;
 
         case LESS_EQUAL:    
             cgen(p->opr.operands[0]);
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             strcpy(condition,"ble");
             break;
 
         case NOT_EQUAL:
             cgen(p->opr.operands[0]);
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             strcpy(condition,"bne");
             break;
 
         case TWO_EQUAL:
             cgen(p->opr.operands[0]);
-            printf("  sw $a0, 0($sp)\n");
-            printf("  addiu $sp, $sp -4\n");
+            fprintf(file,"\tsw $a0, 0($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("  lw $t1, 4($sp)\n");
-            printf("  addiu $sp, $sp, 4\n");
+            fprintf(file,"\tlw $t1, 4($sp)\n");
+            fprintf(file,"\taddiu $sp, $sp, 4\n");
             strcpy(condition,"beq");
             break;
 

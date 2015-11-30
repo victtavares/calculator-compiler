@@ -30,3 +30,4 @@ typedef struct nodeTypeTag {
 
 extern int sym[26];
 extern int headerWasCreated;
+extern FILE *file;                     /*mips' file*/

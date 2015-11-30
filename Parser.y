@@ -11,10 +11,11 @@ nodeType *createOpr(int oper, int nops, ...);
 nodeType *createIdentifier(char identifier[255]);
 nodeType *createConstant(int value);
 void freeNode(nodeType *p);
-int generateMips(nodeType *p);
+int cgen(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
+FILE *file;  
 int sym[26];                    /* symbol table */
 %}
 
@@ -47,7 +48,7 @@ int sym[26];                    /* symbol table */
 
 %%
 block:
-        block command     { generateMips($2); }
+        block command     { cgen($2); }
         |                 
         ;
 
@@ -59,8 +60,8 @@ command:
         | functionCall   END_LINE
         | assignVariable END_LINE          { $$ = $1; }
         | WHILE expr DO command END         { $$ = createOpr(WHILE, 2, $2, $4); }
-        | IF expr THEN command  %prec IFX   { $$ = createOpr(IF, 2, $2, $4); }
-        | IF expr THEN command ELSE command { $$ = createOpr(IF, 3, $2, $4, $6);  }
+        | IF expr THEN command END  %prec IFX   { $$ = createOpr(IF, 2, $2, $4); }
+        | IF expr THEN command ELSE command END { $$ = createOpr(IF, 3, $2, $4, $6);  }
         ;
 
 functionCall:
@@ -145,19 +146,6 @@ nodeType *createOpr(int operator, int numberOfOperands, ...) {
     return p;
 }
 
-/* freeing the node from memory */
-// void freeNode(nodeType *p) {
-//     int i;
-
-//     if (!p) return;
-//     //if the type is an operand, clear the operands too
-//     if (p->type == typeOpr) {
-//         for (i = 0; i < p->opr.numberOfOperands; i++)
-//             freeNode(p->opr.operands[i]);
-// 		free (p->opr.operands);
-//     }
-//     free (p);
-// }
 
 void yyerror(char *s) {
     printf("Error on parsing!\n");
@@ -165,11 +153,17 @@ void yyerror(char *s) {
 }
 
 void exitFunction() {
-   printf("\nli $v0, 10\n");  
-   printf("syscall\n");
+   fprintf(file,"\nli $v0, 10\n");  
+   fprintf(file,"syscall\n");
+   fclose(file);
+}
+
+void openFile() {
+    file = fopen("mips_code.asm","w");
 }
 
 int main(void) {
+    openFile();
     yyparse();
     exitFunction();
     return 0;
