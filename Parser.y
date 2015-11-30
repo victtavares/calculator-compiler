@@ -14,6 +14,7 @@ void freeNode(nodeType *p);
 int generateMips(nodeType *p);
 int yylex(void);
 
+
 void yyerror(char *s);
 int sym[26];                    /* symbol table */
 %}
@@ -164,8 +165,9 @@ void yyerror(char *s) {
 }
 
 void exitFunction() {
-   printf("\nli $v0, 10\n");  
-   printf("syscall\n");
+   printf("\n\tli $v0, 10\n");  
+   printf("\tsyscall\n");
+   fclose(file);
 }
 
 int main(void) {
