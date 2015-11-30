@@ -6,7 +6,7 @@
 int cgen(nodeType *p);
 
 int headerWasCreated = 0;
-
+int firstTime = 1;
 
 //keep count of the assigners
 nodeType* treeToAssignValue[255];
@@ -33,7 +33,6 @@ void generateMips(nodeType *tree) {
 void cgenAssignVariable(char *variable, nodeType *expression) {
     cgen(expression);
     printf("  sw $a0, %s\n", variable);
-    printf("  lw $a0, %s\n", variable);
 }
 
 
@@ -43,8 +42,8 @@ void generateHeader(nodeType *tree) {
         && tree->opr.operator != END_LINE) {
 
         //creating the header text
-        printf(".text\n");
-        printf(".gobl main\n\n");
+        printf("  .text\n");
+        printf("  .globl main\n\n");
         printf("main:\n");
 
         headerWasCreated = 1;
@@ -70,7 +69,7 @@ int cgen(nodeType *p) {
         printf("  li $a0, %d\n", p->constant.value);
         break;
     case typeIdentifier:
-        printf("  li $a0, %s\n", p->identifier.value);      
+        printf("  sw $a0, %s\n", p->identifier.value);      
         break;
 
     case typeOpr:
@@ -106,12 +105,18 @@ int cgen(nodeType *p) {
             break;
 
         case EQUAL:
-            cgenAssignVariable(p->opr.operands[1]->identifier.value,p->opr.operands[1] );
+            cgenAssignVariable(p->opr.operands[0]->identifier.value,p->opr.operands[1] );
             break;
 
 
         case EQUALVAR:
-            printf("%s .word",p->opr.operands[0]->identifier.value);
+
+            if (firstTime) {
+                printf(".data\n");
+                firstTime = 0;
+
+            }
+            printf("  %s .word",p->opr.operands[0]->identifier.value);
 
             nodeType *nodeRight =  p->opr.operands[1];
             if (nodeRight->type == typeConstant) {
@@ -127,107 +132,107 @@ int cgen(nodeType *p) {
 
         case UMINUS:
             cgen(p->opr.operands[0]);
-            printf("sub $a0, $zero, $a0\n");
+            printf("  sub $a0, $zero, $a0\n");
             break;
 
         case PLUS: 
             cgen(p->opr.operands[0]);      
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("add $a0, $t1, $a0\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  add $a0, $t1, $a0\n");
+            printf("  addiu $sp, $sp, 4\n");
             break;
 
         case MINUS: 
             cgen(p->opr.operands[0]);      
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("sub $a0, $t1, $a0\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  sub $a0, $t1, $a0\n");
+            printf("  addiu $sp, $sp, 4\n");
             break;
 
         case TIMES:
             cgen(p->opr.operands[0]);      
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("mul $a0, $t1, $a0\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  mul $a0, $t1, $a0\n");
+            printf("  addiu $sp, $sp, 4\n");
             break;
 
         case DIVIDE:
             cgen(p->opr.operands[0]);      
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("div $a0, $t1, $a0\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  div $a0, $t1, $a0\n");
+            printf("  addiu $sp, $sp, 4\n");
             break;
 
 
         case LESS_THAN: 
             cgen(p->opr.operands[0]);      
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  addiu $sp, $sp, 4\n");
             strcpy(condition,"blt");
             break;
 
         case GREATER_THAN:  
             cgen(p->opr.operands[0]);      
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  addiu $sp, $sp, 4\n");
             strcpy(condition,"bgt");
             break;
 
         case GREAT_EQUAL:
             cgen(p->opr.operands[0]);
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  addiu $sp, $sp, 4\n");
             strcpy(condition,"bne");
             break;
 
         case LESS_EQUAL:    
             cgen(p->opr.operands[0]);
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  addiu $sp, $sp, 4\n");
             strcpy(condition,"ble");
             break;
 
         case NOT_EQUAL:
             cgen(p->opr.operands[0]);
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  addiu $sp, $sp, 4\n");
             strcpy(condition,"bne");
             break;
 
         case TWO_EQUAL:
             cgen(p->opr.operands[0]);
-            printf("sw $a0, 0($sp)\n");
-            printf("addiu $sp, $sp -4\n");
+            printf("  sw $a0, 0($sp)\n");
+            printf("  addiu $sp, $sp -4\n");
             cgen(p->opr.operands[1]);
-            printf("lw $t1, 4($sp)\n");
-            printf("addiu $sp, $sp, 4\n");
+            printf("  lw $t1, 4($sp)\n");
+            printf("  addiu $sp, $sp, 4\n");
             strcpy(condition,"beq");
             break;
 

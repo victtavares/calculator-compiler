@@ -371,13 +371,13 @@ struct yy_trans_info
 	};
 static yyconst flex_int16_t yy_accept[68] =
     {   0,
-        0,    0,   33,   31,   29,   27,   12,   13,    4,    2,
-        3,    5,    1,    1,   27,   11,   14,   10,   30,   30,
-       30,   30,   30,   30,   30,   30,   30,   30,   30,   30,
-       28,   31,   29,    1,    7,    8,    6,   30,   30,   16,
-       30,   30,   30,   22,   30,   24,   30,   30,   30,   30,
-        9,   15,   30,   20,   21,   25,   30,   30,   23,   30,
-       17,   30,   19,   30,   26,   18,    0
+        0,    0,   33,   31,   30,   27,   12,   13,    4,    2,
+        3,    5,    1,    1,   27,   11,   14,   10,   29,   29,
+       29,   29,   29,   29,   29,   29,   29,   29,   29,   29,
+       28,   31,   30,    1,    7,    8,    6,   29,   29,   16,
+       29,   29,   29,   22,   29,   24,   29,   29,   29,   29,
+        9,   15,   29,   20,   21,   25,   29,   29,   23,   29,
+       17,   29,   19,   29,   26,   18,    0
     } ;
 
 static yyconst flex_int32_t yy_ec[256] =
@@ -913,24 +913,24 @@ YY_RULE_SETUP
 case 29:
 YY_RULE_SETUP
 #line 64 "Scanner.l"
-;       /* ignoring whitespace */
-	YY_BREAK
-case 30:
-YY_RULE_SETUP
-#line 66 "Scanner.l"
 { 
                 strcpy(yylval.sIndex, yytext);
                 return VARIABLE;
             }
 	YY_BREAK
+case 30:
+YY_RULE_SETUP
+#line 69 "Scanner.l"
+;       /* ignoring whitespace */
+	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 71 "Scanner.l"
+#line 73 "Scanner.l"
 yyerror("Caracter desconhecido!");
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 72 "Scanner.l"
+#line 74 "Scanner.l"
 ECHO;
 	YY_BREAK
 #line 937 "lex.yy.c"
@@ -1930,7 +1930,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 72 "Scanner.l"
+#line 74 "Scanner.l"
 
 
 int yywrap(void) {
