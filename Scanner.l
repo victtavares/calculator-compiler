@@ -1,6 +1,7 @@
 
 %{
 #include <stdlib.h>
+#include <String.h>
 #include "Structure.h"
 #include "y.tab.h"
 void yyerror(char *);
@@ -63,7 +64,7 @@ number          {numberNoZero}|{zero}
 [ \t]+        ;       /* ignoring whitespace */
 
 {id}        { 
-                yylval.sIndex = *yytext - 'a';
+                strcpy(yylval.sIndex, yytext);
                 return VARIABLE;
             }
 

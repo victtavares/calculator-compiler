@@ -491,10 +491,11 @@ char *yytext;
 #line 1 "Scanner.l"
 #line 3 "Scanner.l"
 #include <stdlib.h>
+#include <String.h>
 #include "Structure.h"
 #include "y.tab.h"
 void yyerror(char *);
-#line 498 "lex.yy.c"
+#line 499 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -676,11 +677,11 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 16 "Scanner.l"
+#line 17 "Scanner.l"
 
 
 
-#line 684 "lex.yy.c"
+#line 685 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -765,7 +766,7 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 19 "Scanner.l"
+#line 20 "Scanner.l"
 {
                 yylval.iValue = atoi(yytext);
                 return INTEGER;
@@ -773,166 +774,166 @@ YY_RULE_SETUP
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 24 "Scanner.l"
+#line 25 "Scanner.l"
 return PLUS;
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 25 "Scanner.l"
+#line 26 "Scanner.l"
 return MINUS;
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 26 "Scanner.l"
+#line 27 "Scanner.l"
 return TIMES;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 27 "Scanner.l"
+#line 28 "Scanner.l"
 return DIVIDE;
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 30 "Scanner.l"
+#line 31 "Scanner.l"
 return GREAT_EQUAL;
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 31 "Scanner.l"
+#line 32 "Scanner.l"
 return LESS_EQUAL;
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 32 "Scanner.l"
+#line 33 "Scanner.l"
 return TWO_EQUAL;
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 33 "Scanner.l"
+#line 34 "Scanner.l"
 return NOT_EQUAL;
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 34 "Scanner.l"
+#line 35 "Scanner.l"
 return GREATER_THAN;
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 35 "Scanner.l"
+#line 36 "Scanner.l"
 return LESS_THAN;
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 38 "Scanner.l"
+#line 39 "Scanner.l"
 return OPEN_PAREN;
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 39 "Scanner.l"
+#line 40 "Scanner.l"
 return CLOSE_PAREN;
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 40 "Scanner.l"
+#line 41 "Scanner.l"
 return EQUAL;
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 42 "Scanner.l"
+#line 43 "Scanner.l"
 return AND;
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 43 "Scanner.l"
+#line 44 "Scanner.l"
 return DO;
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 44 "Scanner.l"
+#line 45 "Scanner.l"
 return ELSE;
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 45 "Scanner.l"
+#line 46 "Scanner.l"
 return WHILE;
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 46 "Scanner.l"
+#line 47 "Scanner.l"
 return THEN;
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 47 "Scanner.l"
+#line 48 "Scanner.l"
 return END;
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 48 "Scanner.l"
+#line 49 "Scanner.l"
 return FOR;
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 49 "Scanner.l"
+#line 50 "Scanner.l"
 return IF;
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 50 "Scanner.l"
+#line 51 "Scanner.l"
 return VAR;
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 51 "Scanner.l"
+#line 52 "Scanner.l"
 return OR;
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 52 "Scanner.l"
+#line 53 "Scanner.l"
 return NOT;
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 55 "Scanner.l"
+#line 56 "Scanner.l"
 return PRINT;
 	YY_BREAK
 case 27:
 /* rule 27 can match eol */
 YY_RULE_SETUP
-#line 57 "Scanner.l"
+#line 58 "Scanner.l"
 return END_LINE;
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 59 "Scanner.l"
+#line 60 "Scanner.l"
 {
                 return *yytext;
              }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 63 "Scanner.l"
+#line 64 "Scanner.l"
 ;       /* ignoring whitespace */
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 65 "Scanner.l"
+#line 66 "Scanner.l"
 { 
-                yylval.sIndex = *yytext - 'a';
+                strcpy(yylval.sIndex, yytext);
                 return VARIABLE;
             }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 70 "Scanner.l"
+#line 71 "Scanner.l"
 yyerror("Caracter desconhecido!");
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 71 "Scanner.l"
+#line 72 "Scanner.l"
 ECHO;
 	YY_BREAK
-#line 936 "lex.yy.c"
+#line 937 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1929,7 +1930,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 71 "Scanner.l"
+#line 72 "Scanner.l"
 
 
 int yywrap(void) {
