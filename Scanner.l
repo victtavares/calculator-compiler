@@ -61,12 +61,14 @@ number          {numberNoZero}|{zero}
                 return *yytext;
              }
 
-[ \t]+        ;       /* ignoring whitespace */
-
 {id}        { 
                 strcpy(yylval.sIndex, yytext);
                 return VARIABLE;
             }
+
+[ \t]+        ;       /* ignoring whitespace */
+
+
 
 .           yyerror("Caracter desconhecido!");
 %%

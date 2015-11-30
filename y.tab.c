@@ -1900,6 +1900,7 @@ nodeType *createOpr(int operator, int numberOfOperands, ...) {
 // }
 
 void yyerror(char *s) {
+    printf("Error on parsing!\n");
     fprintf(stdout, "%s\n", s);
 }
 
