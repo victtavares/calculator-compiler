@@ -29,7 +29,6 @@ int ex(nodeType *p) {
             printf("END_LOOP%d:\n", count);
             count = count + 1;
             break;
-            
         case IF:
             ex(p->opr.op[0]);
             printf("%s $a0, $t1, ENTRY%d\n", condition, count);
@@ -39,20 +38,16 @@ int ex(nodeType *p) {
             ex(p->opr.op[1]);
             printf("ELSE%d:\n", count);
             break;
-            
-                   
-        //    if (ex(p->opr.op[0]))
-        //                     ex(p->opr.op[1]);
-        //                 else if (p->opr.nops > 2)
-        //                     ex(p->opr.op[2]);
-        //                 return 0;
         case PRINT:     
             ex(p->opr.op[0]);
             printf("print\n");
             break;
-        // case DOT_COMMA:       //ex(p->opr.op[0]); return ex(p->opr.op[1]);
-        // case EQUAL:       return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
-        // case UMINUS:    return -ex(p->opr.op[0]);
+        case EQUAL:       
+            //return sym[p->opr.op[0]->id.i] = ex(p->opr.op[1]);
+        case UMINUS:
+            ex(p->opr.op[0]);
+            printf("sub $a0, $zero, $a0\n");
+            break;
         case PLUS: 
             ex(p->opr.op[0]);      
             printf("sw $a0, 0($sp)\n");
@@ -62,7 +57,6 @@ int ex(nodeType *p) {
             printf("add $a0, $t1, $a0\n");
             printf("addiu $sp, $sp, 4\n");
             break;
-
         case MINUS: 
             ex(p->opr.op[0]);      
             printf("sw $a0, 0($sp)\n");
