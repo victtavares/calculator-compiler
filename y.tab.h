@@ -110,7 +110,7 @@
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 21 "Parser.y"
+#line 22 "Parser.y"
 {
     int iValue;                 /* integer value */
     char sIndex[255];                /* symbol table index */
