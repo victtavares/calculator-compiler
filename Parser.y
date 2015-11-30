@@ -15,7 +15,9 @@ int cgen(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
-FILE *file;  
+FILE *file;
+char INPUT[64];
+char OUTPUT[64];
 int sym[26];                    /* symbol table */
 %}
 
@@ -153,16 +155,24 @@ void yyerror(char *s) {
 }
 
 void exitFunction() {
-   fprintf(file,"\nli $v0, 10\n");  
-   fprintf(file,"syscall\n");
+   fprintf(file,"\t\nli $v0, 10\n");  
+   fprintf(file,"\tsyscall\n");
    fclose(file);
 }
 
 void openFile() {
-    file = fopen("mips_code.asm","w");
+    file = fopen(OUTPUT,"w");
 }
 
-int main(void) {
+int main(int argc, char **argv) {
+   
+     if (argc != 3){
+        printf ("\nUso: ./Compiler <INPUT> <OUTPUT>\n");
+        return (1);
+    }else{
+        sprintf(INPUT, "", argv[1]);
+        sprintf(OUTPUT, "%s.asm", argv[2]);
+    }
     openFile();
     yyparse();
     exitFunction();
