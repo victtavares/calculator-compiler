@@ -155,9 +155,10 @@ void yyerror(char *s) {
 }
 
 void exitFunction() {
-   fprintf(file,"\t\nli $v0, 10\n");  
+   fprintf(file,"\n\tli $v0, 10\n");  
    fprintf(file,"\tsyscall\n");
    fclose(file);
+   fclose(stdin);
 }
 
 void openFile() {
@@ -165,15 +166,17 @@ void openFile() {
 }
 
 int main(int argc, char **argv) {
-   
+  
+     // testing arguement 
      if (argc != 3){
         printf ("\nUso: ./Compiler <INPUT> <OUTPUT>\n");
         return (1);
     }else{
-        sprintf(INPUT, "", argv[1]);
-        sprintf(OUTPUT, "%s.asm", argv[2]);
+        sprintf(INPUT, "%s", argv[1]);
+        sprintf(OUTPUT, "%s", argv[2]);
     }
     openFile();
+    freopen(INPUT, "r", stdin);
     yyparse();
     exitFunction();
     return 0;
