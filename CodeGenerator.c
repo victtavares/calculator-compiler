@@ -13,6 +13,7 @@ nodeType* treeToAssignValue[255];
 char identifierToAssignValue[255][255];
 int count = 0;
 int count2 = 0;
+int countWhile = 0;
 
 //conditional paramater
 char condition[4];
@@ -58,15 +59,16 @@ int cgen(nodeType *p) {
         switch(p->opr.operator) {
 
         case WHILE:
+            countWhile++;
             cgen(p->opr.operands[0]);
-            fprintf(file,"LOOP%d:\n", count2);
-            fprintf(file,"%s $a0, $t1, true_branch%d\n", condition, count2);
-            fprintf(file,"j END_LOOP%d\n", count2);
-            fprintf(file,"true_branch%d:\n", count2);
+            fprintf(file,"LOOP%d:\n", countWhile);
+            fprintf(file,"\t%s $a0, $t1, ENTRY%d\n", condition, countWhile);
+            fprintf(file,"\tb END_LOOP%d\n", countWhile);
+            fprintf(file,"ENTRY%d:\n", countWhile);
+            int oldWhileValue = countWhile;
             cgen(p->opr.operands[1]);
-            fprintf(file,"j LOOP%d\n", count2);
-            fprintf(file,"END_LOOP%d:\n", count2);
-            count2 = count2 + 1;
+            fprintf(file,"\tb LOOP%d\n", oldWhileValue);
+            fprintf(file,"END_LOOP%d:\n", oldWhileValue);
             break;
 
         case IF:
@@ -102,11 +104,11 @@ int cgen(nodeType *p) {
         case EQUALVAR:
 
             if (firstTime) {
-                
                 fprintf(file,".data\n");
                 firstTime = 0;
-
             }
+
+
             fprintf(file,"\t%s .word",p->opr.operands[0]->identifier.value);
 
             nodeType *nodeRight =  p->opr.operands[1];
