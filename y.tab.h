@@ -68,8 +68,9 @@
      NOT = 284,
      PRINT = 285,
      EQUALVAR = 286,
-     IFX = 287,
-     UMINUS = 288
+     COMMAND = 287,
+     IFX = 288,
+     UMINUS = 289
    };
 #endif
 /* Tokens.  */
@@ -102,8 +103,9 @@
 #define NOT 284
 #define PRINT 285
 #define EQUALVAR 286
-#define IFX 287
-#define UMINUS 288
+#define COMMAND 287
+#define IFX 288
+#define UMINUS 289
 
 
 
@@ -117,7 +119,7 @@ typedef union YYSTYPE
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 1529 of yacc.c.  */
-#line 121 "y.tab.h"
+#line 123 "y.tab.h"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1

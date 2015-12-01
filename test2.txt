@@ -1,4 +1,1 @@
-var test2 =5+2;
-var test=5;
-var test3 =3+4;
-print(1+1);
+print(7+5)

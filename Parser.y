@@ -33,7 +33,7 @@ char OUTPUT[64];                   /* symbol table */
 %token OPEN_PAREN CLOSE_PAREN EQUAL END_LINE
 %token AND DO ELSE WHILE THEN END FOR IF VAR OR NOT
 %token PRINT
-%token EQUALVAR
+%token EQUALVAR COMMAND 
 
 %nonassoc IFX
 %nonassoc ELSE
@@ -45,24 +45,28 @@ char OUTPUT[64];                   /* symbol table */
 %right NOT
 %right UMINUS
 
- %type <nPtr> command expr functionCall assignVariable
+ %type <nPtr> block command expr functionCall assignVariable
 
 %%
+program:
+        block                      { cgen($1); }
+        ;
+
+
 block:
-        block command     { cgen($2); }
-        |                 
+        block command END_LINE %prec COMMAND   { $$ = createOpr(COMMAND, 2, $2, $1);}
+        | block command                        { $$ = createOpr(COMMAND, 2, $2, $1);}
+        |                                      { $$ = createOpr(COMMAND, 0);}
         ;
 
 
 command:
-        END_LINE                           { $$ = createOpr(END_LINE, 2, NULL, NULL); }
-        | expr END_LINE                    { $$ = $1; }
-        | VARIABLE EQUAL expr END_LINE     { $$ = createOpr(EQUAL, 2, createIdentifier($1), $3); }
-        | functionCall   END_LINE
-        | assignVariable END_LINE          { $$ = $1; }
+        VARIABLE EQUAL expr      { $$ = createOpr(EQUAL, 2, createIdentifier($1), $3); }
+        | functionCall 
+        | assignVariable           { $$ = $1; }
         | WHILE expr DO command END         { $$ = createOpr(WHILE, 2, $2, $4); }
-        | IF expr THEN command END  %prec IFX   { $$ = createOpr(IF, 2, $2, $4); }
-        | IF expr THEN command ELSE command END { $$ = createOpr(IF, 3, $2, $4, $6);  }
+        | IF expr THEN block END  %prec IFX   { $$ = createOpr(IF, 2, $2, $4); }
+        | IF expr THEN block ELSE block END { $$ = createOpr(IF, 3, $2, $4, $6);  }
         ;
 
 functionCall:

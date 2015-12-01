@@ -55,7 +55,7 @@ number          {numberNoZero}|{zero}
 
 "print"         return PRINT;
 
-[;\n]           return END_LINE;
+[;]           return END_LINE;
 
 [{}]         {
                 return *yytext;
@@ -66,7 +66,7 @@ number          {numberNoZero}|{zero}
                 return VARIABLE;
             }
 
-[ \t]+        ;       /* ignoring whitespace */
+[ \t\n]+        ;       /* ignoring whitespace */
 
 
 
