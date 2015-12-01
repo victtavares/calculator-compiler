@@ -30,7 +30,7 @@ void generateHeader(nodeType *tree) {
 
     if (!headerWasCreated 
         && (tree->type != typeOpr || tree->opr.operator != EQUALVAR)
-        && tree->opr.operator != END_LINE) {
+        && tree->opr.operator != COMMAND) {
 
         //creating the header text
         fprintf(file,"\t.text\n");
@@ -48,7 +48,6 @@ int cgen(nodeType *p) {
     if (!p) return 0;
     generateHeader(p);
     switch(p->type) {
-
     case typeConstant:  
         fprintf(file,"\tli $a0, %d\n", p->constant.value);
         break;
@@ -64,8 +63,9 @@ int cgen(nodeType *p) {
 
         case COMMAND:
             if (p->opr.numberOfOperands >= 2) {
-                cgen(p->opr.operands[0]);
                 cgen(p->opr.operands[1]);
+                cgen(p->opr.operands[0]);
+
             }
             break;
     

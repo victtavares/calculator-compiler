@@ -1,6 +1,1 @@
-if x < 0 then
-print(a)
-print(b)
-else 
-print(a)
-end
+print(7+5)

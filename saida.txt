@@ -2,26 +2,15 @@
 	.globl main
 
 main:
-	sw $a0, x
+	li $a0, 7
 	sw $a0, 0($sp)
 	addiu $sp, $sp -4
-	li $a0, 0
+	li $a0, 5
 	lw $t1, 4($sp)
+	add $a0, $t1, $a0
 	addiu $sp, $sp, 4
-	blt $a0, $t1, true_branch1
-false_branch1:
-	sw $a0, a
 	li $v0, 1
 	syscall
-	b end_if
-true_branch1:
-	sw $a0, b
-	li $v0, 1
-	syscall
-	sw $a0, a
-	li $v0, 1
-	syscall
-	end_if1:
 
 	li $v0, 10
 	syscall
