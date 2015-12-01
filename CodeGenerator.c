@@ -45,7 +45,6 @@ void generateHeader(nodeType *tree) {
 }
 
 int cgen(nodeType *p) {
-
     if (!p) return 0;
     generateHeader(p);
     switch(p->type) {
@@ -58,8 +57,18 @@ int cgen(nodeType *p) {
         break;
 
     case typeOpr:
+        // if (p->opr.operator != COMMAND) {
+        //     printf("not command %d\n", p->opr.operator);
+        // }
         switch(p->opr.operator) {
 
+        case COMMAND:
+            //printf("%d\n",p->opr.numberOfOperands);
+            if (p->opr.numberOfOperands >= 1) {
+                cgen(p->opr.operands[0]);
+            }
+            break;
+    
         case WHILE:
             countWhile++;
             cgen(p->opr.operands[0]);

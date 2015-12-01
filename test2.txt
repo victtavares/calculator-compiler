@@ -1,4 +1,6 @@
-var test2 =5+2;
-var test=5;
-var test3 =3+4;
-print(1+1);
+if x < 0 then
+print(a)
+print(b)
+else 
+print(a)
+end
