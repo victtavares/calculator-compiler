@@ -63,9 +63,9 @@ int cgen(nodeType *p) {
         switch(p->opr.operator) {
 
         case COMMAND:
-            //printf("%d\n",p->opr.numberOfOperands);
-            if (p->opr.numberOfOperands >= 1) {
+            if (p->opr.numberOfOperands >= 2) {
                 cgen(p->opr.operands[0]);
+                cgen(p->opr.operands[1]);
             }
             break;
     

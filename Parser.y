@@ -54,8 +54,8 @@ program:
 
 
 block:
-        block command END_LINE %prec COMMAND   { $$ = createOpr(COMMAND, 2, $2);}
-        | block command                        { $$ = createOpr(COMMAND, 1, $2);}
+        block command END_LINE %prec COMMAND   { $$ = createOpr(COMMAND, 2, $2, $1);}
+        | block command                        { $$ = createOpr(COMMAND, 2, $2, $1);}
         |                                      { $$ = createOpr(COMMAND, 0);}
         ;
 

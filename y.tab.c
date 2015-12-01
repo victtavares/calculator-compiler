@@ -1477,12 +1477,12 @@ yyreduce:
 
   case 3:
 #line 57 "Parser.y"
-    { (yyval.nPtr) = createOpr(COMMAND, 2, (yyvsp[(2) - (3)].nPtr));}
+    { (yyval.nPtr) = createOpr(COMMAND, 2, (yyvsp[(2) - (3)].nPtr), (yyvsp[(1) - (3)].nPtr));}
     break;
 
   case 4:
 #line 58 "Parser.y"
-    { (yyval.nPtr) = createOpr(COMMAND, 1, (yyvsp[(2) - (2)].nPtr));}
+    { (yyval.nPtr) = createOpr(COMMAND, 2, (yyvsp[(2) - (2)].nPtr), (yyvsp[(1) - (2)].nPtr));}
     break;
 
   case 5:
