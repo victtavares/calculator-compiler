@@ -17,8 +17,7 @@ int yylex(void);
 void yyerror(char *s);
 FILE *file;
 char INPUT[64];
-char OUTPUT[64];
-int sym[26];                    /* symbol table */
+char OUTPUT[64];                   /* symbol table */
 %}
 
 %union {
