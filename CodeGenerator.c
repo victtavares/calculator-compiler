@@ -26,6 +26,8 @@ void cgenAssignVariable(char *variable, nodeType *expression) {
 
 
 void generateHeader(nodeType *tree) {
+    int i;
+
     if (!headerWasCreated 
         && (tree->type != typeOpr || tree->opr.operator != EQUALVAR)
         && tree->opr.operator != END_LINE) {
@@ -36,7 +38,7 @@ void generateHeader(nodeType *tree) {
         fprintf(file,"main:\n");
 
         headerWasCreated = 1;
-        for (int i = 0; i < count; i++) {
+        for (i = 0; i < count; i++) {
             cgenAssignVariable(identifierToAssignValue[i], treeToAssignValue[i]);
         }
     }  
@@ -92,7 +94,7 @@ int cgen(nodeType *p) {
 
         case PRINT:     
             cgen(p->opr.operands[0]);
-            fprintf(file,"\tli $vo, 1\n");
+            fprintf(file,"\tli $v0, 1\n");
             fprintf(file,"\tsyscall\n");
             break;
 
@@ -104,12 +106,12 @@ int cgen(nodeType *p) {
         case EQUALVAR:
 
             if (firstTime) {
-                fprintf(file,".data\n");
+                fprintf(file,"\t.data\n");
                 firstTime = 0;
             }
 
 
-            fprintf(file,"\t%s .word",p->opr.operands[0]->identifier.value);
+            fprintf(file,"%s:\t .word",p->opr.operands[0]->identifier.value);
 
             nodeType *nodeRight =  p->opr.operands[1];
             if (nodeRight->type == typeConstant) {

@@ -491,7 +491,7 @@ char *yytext;
 #line 1 "Scanner.l"
 #line 3 "Scanner.l"
 #include <stdlib.h>
-#include <String.h>
+#include <string.h>
 #include "Structure.h"
 #include "y.tab.h"
 void yyerror(char *);

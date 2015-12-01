@@ -154,8 +154,9 @@ int cgen(nodeType *p);
 int yylex(void);
 
 void yyerror(char *s);
-FILE *file;  
-int sym[26];                    /* symbol table */
+FILE *file;
+char INPUT[64];
+char OUTPUT[64];                   /* symbol table */
 
 
 /* Enabling traces.  */
@@ -178,14 +179,14 @@ int sym[26];                    /* symbol table */
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 typedef union YYSTYPE
-#line 22 "Parser.y"
+#line 23 "Parser.y"
 {
     int iValue;                 /* integer value */
     char sIndex[255];                /* symbol table index */
     nodeType *nPtr;             /* node pointer */
 }
 /* Line 193 of yacc.c.  */
-#line 189 "y.tab.c"
+#line 190 "y.tab.c"
 	YYSTYPE;
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
@@ -198,7 +199,7 @@ typedef union YYSTYPE
 
 
 /* Line 216 of yacc.c.  */
-#line 202 "y.tab.c"
+#line 203 "y.tab.c"
 
 #ifdef short
 # undef short
@@ -496,10 +497,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    51,    51,    52,    57,    58,    59,    60,    61,    62,
-      63,    64,    68,    72,    73,    77,    78,    79,    80,    81,
-      82,    83,    84,    85,    86,    87,    88,    89,    90,    91,
-      92,    93
+       0,    52,    52,    53,    58,    59,    60,    61,    62,    63,
+      64,    65,    69,    73,    74,    78,    79,    80,    81,    82,
+      83,    84,    85,    86,    87,    88,    89,    90,    91,    92,
+      93,    94
 };
 #endif
 
@@ -1477,148 +1478,148 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 51 "Parser.y"
+#line 52 "Parser.y"
     { cgen((yyvsp[(2) - (2)].nPtr)); }
     break;
 
   case 4:
-#line 57 "Parser.y"
+#line 58 "Parser.y"
     { (yyval.nPtr) = createOpr(END_LINE, 2, NULL, NULL); }
     break;
 
   case 5:
-#line 58 "Parser.y"
+#line 59 "Parser.y"
     { (yyval.nPtr) = (yyvsp[(1) - (2)].nPtr); }
     break;
 
   case 6:
-#line 59 "Parser.y"
+#line 60 "Parser.y"
     { (yyval.nPtr) = createOpr(EQUAL, 2, createIdentifier((yyvsp[(1) - (4)].sIndex)), (yyvsp[(3) - (4)].nPtr)); }
     break;
 
   case 8:
-#line 61 "Parser.y"
+#line 62 "Parser.y"
     { (yyval.nPtr) = (yyvsp[(1) - (2)].nPtr); }
     break;
 
   case 9:
-#line 62 "Parser.y"
+#line 63 "Parser.y"
     { (yyval.nPtr) = createOpr(WHILE, 2, (yyvsp[(2) - (5)].nPtr), (yyvsp[(4) - (5)].nPtr)); }
     break;
 
   case 10:
-#line 63 "Parser.y"
+#line 64 "Parser.y"
     { (yyval.nPtr) = createOpr(IF, 2, (yyvsp[(2) - (5)].nPtr), (yyvsp[(4) - (5)].nPtr)); }
     break;
 
   case 11:
-#line 64 "Parser.y"
+#line 65 "Parser.y"
     { (yyval.nPtr) = createOpr(IF, 3, (yyvsp[(2) - (7)].nPtr), (yyvsp[(4) - (7)].nPtr), (yyvsp[(6) - (7)].nPtr));  }
     break;
 
   case 12:
-#line 68 "Parser.y"
+#line 69 "Parser.y"
     { (yyval.nPtr) = createOpr(PRINT, 1, (yyvsp[(3) - (4)].nPtr)); }
     break;
 
   case 13:
-#line 72 "Parser.y"
+#line 73 "Parser.y"
     { (yyval.nPtr) = createOpr(EQUALVAR, 2, createIdentifier((yyvsp[(2) - (2)].sIndex)), createConstant(0)); }
     break;
 
   case 14:
-#line 73 "Parser.y"
+#line 74 "Parser.y"
     { (yyval.nPtr) = createOpr(EQUALVAR, 2, createIdentifier((yyvsp[(2) - (4)].sIndex)), (yyvsp[(4) - (4)].nPtr)); }
     break;
 
   case 15:
-#line 77 "Parser.y"
+#line 78 "Parser.y"
     { (yyval.nPtr) = createConstant((yyvsp[(1) - (1)].iValue)); }
     break;
 
   case 16:
-#line 78 "Parser.y"
+#line 79 "Parser.y"
     { (yyval.nPtr) = createIdentifier((yyvsp[(1) - (1)].sIndex)); }
     break;
 
   case 17:
-#line 79 "Parser.y"
+#line 80 "Parser.y"
     { (yyval.nPtr) = createOpr(UMINUS, 1, (yyvsp[(2) - (2)].nPtr)); }
     break;
 
   case 18:
-#line 80 "Parser.y"
+#line 81 "Parser.y"
     { (yyval.nPtr) = createOpr(PLUS, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 19:
-#line 81 "Parser.y"
+#line 82 "Parser.y"
     { (yyval.nPtr) = createOpr(MINUS, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 20:
-#line 82 "Parser.y"
+#line 83 "Parser.y"
     { (yyval.nPtr) = createOpr(TIMES, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 21:
-#line 83 "Parser.y"
+#line 84 "Parser.y"
     { (yyval.nPtr) = createOpr(DIVIDE, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 22:
-#line 84 "Parser.y"
+#line 85 "Parser.y"
     { (yyval.nPtr) = createOpr(LESS_THAN, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 23:
-#line 85 "Parser.y"
+#line 86 "Parser.y"
     { (yyval.nPtr) = createOpr(LESS_EQUAL, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 24:
-#line 86 "Parser.y"
+#line 87 "Parser.y"
     { (yyval.nPtr) = createOpr(GREATER_THAN, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 25:
-#line 87 "Parser.y"
+#line 88 "Parser.y"
     { (yyval.nPtr) = createOpr(GREAT_EQUAL, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 26:
-#line 88 "Parser.y"
+#line 89 "Parser.y"
     { (yyval.nPtr) = createOpr(TWO_EQUAL, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 27:
-#line 89 "Parser.y"
+#line 90 "Parser.y"
     { (yyval.nPtr) = createOpr(NOT_EQUAL, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 28:
-#line 90 "Parser.y"
+#line 91 "Parser.y"
     { (yyval.nPtr) = createOpr(AND, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 29:
-#line 91 "Parser.y"
+#line 92 "Parser.y"
     { (yyval.nPtr) = createOpr(OR, 2, (yyvsp[(1) - (3)].nPtr), (yyvsp[(3) - (3)].nPtr)); }
     break;
 
   case 30:
-#line 92 "Parser.y"
+#line 93 "Parser.y"
     { (yyval.nPtr) = (yyvsp[(2) - (3)].nPtr); }
     break;
 
   case 31:
-#line 93 "Parser.y"
+#line 94 "Parser.y"
     { (yyval.nPtr) = createOpr(UMINUS, 1, (yyvsp[(2) - (2)].nPtr)); }
     break;
 
 
 /* Line 1267 of yacc.c.  */
-#line 1622 "y.tab.c"
+#line 1623 "y.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1832,7 +1833,7 @@ yyreturn:
 }
 
 
-#line 96 "Parser.y"
+#line 97 "Parser.y"
 
 
 nodeType *createConstant(int value) {
@@ -1893,17 +1894,28 @@ void yyerror(char *s) {
 }
 
 void exitFunction() {
-   fprintf(file,"\nli $v0, 10\n");  
-   fprintf(file,"syscall\n");
+   fprintf(file,"\n\tli $v0, 10\n");  
+   fprintf(file,"\tsyscall\n");
    fclose(file);
+   fclose(stdin);
 }
 
 void openFile() {
-    file = fopen("mips_code.asm","w");
+    file = fopen(OUTPUT,"w");
 }
 
-int main(void) {
+int main(int argc, char **argv) {
+  
+     // testing arguement 
+     if (argc != 3){
+        printf ("\nUso: ./Compiler <INPUT> <OUTPUT>\n");
+        return (1);
+    }else{
+        sprintf(INPUT, "%s", argv[1]);
+        sprintf(OUTPUT, "%s", argv[2]);
+    }
     openFile();
+    freopen(INPUT, "r", stdin);
     yyparse();
     exitFunction();
     return 0;
